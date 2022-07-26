@@ -9,6 +9,8 @@ namespace CelupartsPoC
         [Key]
         public int IdRequest { get; set; }
 
+        public int? IdUser { get; set; } 
+
         [ForeignKey("IdUser")]
         [JsonIgnore]
         public virtual UserDto? UserDto { get; set; }
