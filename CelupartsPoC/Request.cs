@@ -29,7 +29,7 @@ namespace CelupartsPoC
     public class RequestWithEquipments
     {
         [Key]
-        public int IdRepairRequest { get; set; }
+        public int IdRequest { get; set; }
         public int? IdUser { get; set; }
 
         [ForeignKey("IdUser")]

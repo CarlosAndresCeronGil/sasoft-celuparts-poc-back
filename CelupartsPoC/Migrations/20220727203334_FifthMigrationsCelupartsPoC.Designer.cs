@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220727203334_FifthMigrationsCelupartsPoC")]
+    partial class FifthMigrationsCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,31 +114,6 @@ namespace CelupartsPoC.Migrations
                     b.ToTable("Request");
                 });
 
-            modelBuilder.Entity("CelupartsPoC.RequestState", b =>
-                {
-                    b.Property<int>("IdRequestState")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRequestState"), 1L, 1);
-
-                    b.Property<int>("IdRequest")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ProductInReturn")
-                        .HasColumnType("bit");
-
-                    b.HasKey("IdRequestState");
-
-                    b.HasIndex("IdRequest");
-
-                    b.ToTable("RequestStates");
-                });
-
             modelBuilder.Entity("CelupartsPoC.User", b =>
                 {
                     b.Property<int>("Id")
@@ -227,17 +204,6 @@ namespace CelupartsPoC.Migrations
                         .HasForeignKey("IdUser");
 
                     b.Navigation("UserDto");
-                });
-
-            modelBuilder.Entity("CelupartsPoC.RequestState", b =>
-                {
-                    b.HasOne("CelupartsPoC.Request", "Request")
-                        .WithMany()
-                        .HasForeignKey("IdRequest")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("CelupartsPoC.Request", b =>
