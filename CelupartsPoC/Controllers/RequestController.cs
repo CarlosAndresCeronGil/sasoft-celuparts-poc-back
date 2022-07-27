@@ -7,12 +7,17 @@ namespace CelupartsPoC.Controllers
     [ApiController]
     public class RequestController : ControllerBase
     {
-        public static List<Request> requests = DataList.requests.ToList();
+        private readonly DataContext _context;
+
+        public RequestController(DataContext context)
+        {
+            this._context = context;
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<Request>>> Get()
         {
-            return Ok(requests);
+            return Ok(await _context.Request.ToListAsync());
         }
     }
 }

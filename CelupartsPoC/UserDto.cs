@@ -5,7 +5,7 @@ namespace CelupartsPoC
     public class UserDto
     {
         [Key]
-        public int? IdUser { get; set; } = 0!;
+        public int? IdUser { get; set; }
         public string IdType { get; set; } = string.Empty;
         public string IdNumber { get; set; } = string.Empty;
         public string Names { get; set; } = string.Empty;

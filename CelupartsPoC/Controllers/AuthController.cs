@@ -13,10 +13,12 @@ namespace CelupartsPoC.Controllers
     {
         public static User user = new User();
         private readonly IConfiguration _configuration;
+        private readonly DataContext _context;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, DataContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpPost("register")]
@@ -27,6 +29,9 @@ namespace CelupartsPoC.Controllers
             user.Email = request.Email;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+
+            _context.UsersDto.Add(request);
+            await _context.SaveChangesAsync();
 
             return Ok(user);
         }

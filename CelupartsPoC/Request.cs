@@ -30,6 +30,7 @@ namespace CelupartsPoC
     {
         [Key]
         public int IdRepairRequest { get; set; }
+        public int? IdUser { get; set; }
 
         [ForeignKey("IdUser")]
         [JsonIgnore]
