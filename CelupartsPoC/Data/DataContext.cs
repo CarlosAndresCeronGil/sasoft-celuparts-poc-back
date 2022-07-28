@@ -13,5 +13,6 @@ namespace CelupartsPoC.Data
         public DbSet<User> User { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<RequestState> RequestStates { get; set; }
+        public DbSet<ProductReview> ProductReview { get; set; }
     }
 }

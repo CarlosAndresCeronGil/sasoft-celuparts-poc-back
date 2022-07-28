@@ -30,7 +30,8 @@ namespace CelupartsPoC.Controllers
                 Quote = request.Quote,
                 StatusQuote = request.StatusQuote,
                 TechnicalRemarks = request.TechnicalRemarks,
-                Equipments = request.Equipments.Select(n => n).ToList()
+                Equipments = request.Equipments.Select(n => n).ToList(),
+                RequestStates = request.RequestStates.Select(n => n).ToList(),
             }).ToList();
 
             return Ok(await _context.Request.ToListAsync());

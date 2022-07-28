@@ -24,6 +24,7 @@ namespace CelupartsPoC
         public string StatusQuote { get; set; } = string.Empty;
         public string TechnicalRemarks { get; set; } = string.Empty;
         public virtual List<Equipment>? Equipments { get; set; } = new List<Equipment>()!;
+        public virtual List<RequestState> RequestStates { get; set; } = new List<RequestState>()!;
     }
 
     public class RequestWithEquipments
@@ -45,5 +46,6 @@ namespace CelupartsPoC
         public string StatusQuote { get; set; } = string.Empty;
         public string TechnicalRemarks { get; set; } = string.Empty;
         public virtual List<Equipment>? Equipments { get; set; } = new List<Equipment>()!;
+        public virtual List<RequestState> RequestStates { get; set; } = new List<RequestState>()!;
     }
 }
