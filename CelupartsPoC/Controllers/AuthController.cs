@@ -30,7 +30,9 @@ namespace CelupartsPoC.Controllers
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
+            _context.User.Add(user);
             _context.UsersDto.Add(request);
+
             await _context.SaveChangesAsync();
 
             return Ok(user);
@@ -39,16 +41,18 @@ namespace CelupartsPoC.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> LoginUser(UserDto request)
         {
-            if(user.Email != request.Email)
+            //var dbUser = _context.User.FindAsync(request.Email);
+            var dbUser = _context.User.Where(x => x.Email == request.Email).FirstOrDefault();
+            if(dbUser.Email != request.Email)
             {
                 return BadRequest("User not found!");
             }
-            if(!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            if(!VerifyPasswordHash(request.Password, dbUser.PasswordHash, dbUser.PasswordSalt))
             {
                 return BadRequest("Wrong password!");
             }
 
-            string token = CreateToken(user);
+            string token = CreateToken(dbUser);
             return Ok(token);
         }
 

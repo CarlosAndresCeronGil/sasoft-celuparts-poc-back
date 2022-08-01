@@ -2,6 +2,7 @@
 {
     public class DataList
     {
+        /*
         public static List<Request> requests = new List<Request>
         {
                 new Request{ IdRequest =  1, IdUser = 1,
@@ -34,7 +35,7 @@
                     Email = "user3@email.com", Password = "12345",
                     AccountStatus = "Habilitada"
                 }
-         };
+         };*/
 
     }
 }

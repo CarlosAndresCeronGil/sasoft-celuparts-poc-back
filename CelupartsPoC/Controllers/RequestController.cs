@@ -29,7 +29,6 @@ namespace CelupartsPoC.Controllers
                 Status = request.Status,
                 Quote = request.Quote,
                 StatusQuote = request.StatusQuote,
-                TechnicalRemarks = request.TechnicalRemarks,
                 Equipments = request.Equipments.Select(n => n).ToList(),
                 RequestStates = request.RequestStates.Select(n => n).ToList(),
             }).ToList();
@@ -74,7 +73,6 @@ namespace CelupartsPoC.Controllers
             dbRequest.Result.Status = requestR.Status;
             dbRequest.Result.Quote = requestR.Quote;
             dbRequest.Result.StatusQuote = requestR.StatusQuote;
-            dbRequest.Result.TechnicalRemarks = requestR.TechnicalRemarks;
 
             await _context.SaveChangesAsync();
 

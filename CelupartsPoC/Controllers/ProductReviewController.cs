@@ -50,6 +50,7 @@ namespace CelupartsPoC.Controllers
             }
             dbProductReview.Result.IdRequest = request.IdRequest;
             dbProductReview.Result.RepairDate = request.RepairDate;
+            dbProductReview.Result.TechnicalRemarks = request.TechnicalRemarks;
 
             await _context.SaveChangesAsync();
 

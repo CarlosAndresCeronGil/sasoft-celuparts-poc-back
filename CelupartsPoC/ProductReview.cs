@@ -15,5 +15,6 @@ namespace CelupartsPoC
         [JsonIgnore]
         public virtual Request? Request { get; set; }
         public DateTime RepairDate { get; set; }
+        public string TechnicalRemarks { get; set; } = string.Empty;
     }
 }

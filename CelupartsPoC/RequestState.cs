@@ -14,6 +14,6 @@ namespace CelupartsPoC
         [JsonIgnore]
         public virtual Request? Request { get; set; }
         public string PaymentStatus { get; set; } = string.Empty;
-        public bool ProductInReturn { get; set; }
+        public bool ProductReturned { get; set; }
     }
 }
