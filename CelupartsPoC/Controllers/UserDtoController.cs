@@ -22,6 +22,7 @@ namespace CelupartsPoC.Controllers
             {
                 IdUser = userDto.IdUser,
                 IdType = userDto.IdType,
+                IdNumber = userDto.IdNumber,
                 Names = userDto.Names,
                 Surnames = userDto.Surnames,
                 Phone = userDto.Phone,

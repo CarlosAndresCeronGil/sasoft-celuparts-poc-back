@@ -22,6 +22,7 @@ namespace CelupartsPoC
     {
         public int? IdUser { get; set; } = 0!;
         public string IdType { get; set; } = string.Empty;
+        public string IdNumber { get; set; } = string.Empty;
         public string Names { get; set; } = string.Empty;
         public string Surnames { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;

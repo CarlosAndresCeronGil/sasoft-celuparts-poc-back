@@ -11,7 +11,7 @@ namespace CelupartsPoC.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public static User user = new User();
+        //public static User user = new User();
         private readonly IConfiguration _configuration;
         private readonly DataContext _context;
 
@@ -25,6 +25,8 @@ namespace CelupartsPoC.Controllers
         public async Task<ActionResult<User>> RegisterUser(UserDto request)
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            
+            User user = new User();
 
             user.Email = request.Email;
             user.PasswordHash = passwordHash;

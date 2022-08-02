@@ -53,7 +53,7 @@ namespace CelupartsPoC.Controllers
             _context.Request.Add(request);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Request.ToListAsync());
+            return Ok(await _context.Request.FindAsync(request.IdRequest));
         }
 
         [HttpPut]
