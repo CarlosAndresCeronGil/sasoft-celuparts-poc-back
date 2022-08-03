@@ -12,7 +12,7 @@ namespace CelupartsPoC.Data
         public DbSet<Request> Request { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
-        public DbSet<RequestState> RequestStates { get; set; }
+        public DbSet<RequestStatus> RequestStatus { get; set; }
         public DbSet<ProductReview> ProductReview { get; set; }
     }
 }

@@ -5,25 +5,25 @@ namespace CelupartsPoC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RequestStateController : ControllerBase
+    public class RequestStatusController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public RequestStateController(DataContext context)
+        public RequestStatusController(DataContext context)
         {
             this._context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<RequestState>>> Get()
+        public async Task<ActionResult<List<RequestStatus>>> Get()
         {
-            return Ok(await _context.RequestStates.ToListAsync());
+            return Ok(await _context.RequestStatus.ToListAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<RequestState>> Get(int id)
+        public async Task<ActionResult<RequestStatus>> Get(int id)
         {
-            var requestState = _context.RequestStates.FindAsync(id);
+            var requestState = _context.RequestStatus.FindAsync(id);
             if (requestState.Result == null)
             {
                 return BadRequest("Request state not found!");
@@ -32,42 +32,43 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<RequestState>>> AddRequestState(RequestState requestState)
+        public async Task<ActionResult<List<RequestStatus>>> AddRequestState(RequestStatus requestState)
         {
-            _context.RequestStates.Add(requestState);
+            _context.RequestStatus.Add(requestState);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.RequestStates.ToListAsync());
+            return Ok(await _context.RequestStatus.ToListAsync());
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<RequestState>>> UpdateRequestState(RequestState request)
+        public async Task<ActionResult<List<RequestStatus>>> UpdateRequestState(RequestStatus request)
         {
-            var dbRequestState = _context.RequestStates.FindAsync(request.IdRequestState);
+            var dbRequestState = _context.RequestStatus.FindAsync(request.IdRequestStatus);
             if (dbRequestState.Result == null)
             {
                 return BadRequest("Request state not found!");
             }
             dbRequestState.Result.IdRequest = request.IdRequest;
+            dbRequestState.Result.Status = request.Status;
             dbRequestState.Result.PaymentStatus = request.PaymentStatus;
             dbRequestState.Result.ProductReturned = request.ProductReturned;
 
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.RequestStates.ToListAsync());
+            return Ok(await _context.RequestStatus.ToListAsync());
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<RequestState>>> Delete(int id)
+        public async Task<ActionResult<List<RequestStatus>>> Delete(int id)
         {
-            var dbRequestState = _context.RequestStates.FindAsync(id);
+            var dbRequestState = _context.RequestStatus.FindAsync(id);
             if (dbRequestState.Result == null)
             {
                 return BadRequest("Request state not found!");
             }
-            _context.RequestStates.Remove(dbRequestState.Result);
+            _context.RequestStatus.Remove(dbRequestState.Result);
             await _context.SaveChangesAsync();
-            return Ok(await _context.RequestStates.ToListAsync());
+            return Ok(await _context.RequestStatus.ToListAsync());
         }
     }
 }

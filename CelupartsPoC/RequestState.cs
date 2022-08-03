@@ -4,15 +4,16 @@ using System.Text.Json.Serialization;
 
 namespace CelupartsPoC
 {
-    public class RequestState
+    public class RequestStatus
     {
         [Key]
-        public int IdRequestState { get; set; }
+        public int IdRequestStatus { get; set; }
         public int IdRequest { get; set; }
 
         [ForeignKey("IdRequest")]
         [JsonIgnore]
         public virtual Request? Request { get; set; }
+        public string Status { get; set; } = string.Empty;
         public string PaymentStatus { get; set; } = string.Empty;
         public bool ProductReturned { get; set; }
     }

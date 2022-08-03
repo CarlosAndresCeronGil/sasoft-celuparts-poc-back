@@ -26,11 +26,10 @@ namespace CelupartsPoC.Controllers
                 DeliveryAddress = request.DeliveryAddress,
                 PickUpTime = request.PickUpTime,
                 PaymentMethod = request.PaymentMethod,
-                Status = request.Status,
                 Quote = request.Quote,
                 StatusQuote = request.StatusQuote,
                 Equipments = request.Equipments.Select(n => n).ToList(),
-                RequestStates = request.RequestStates.Select(n => n).ToList(),
+                RequestStatus = request.RequestStatus.Select(n => n).ToList(),
             }).ToList();
 
             return Ok(await _context.Request.ToListAsync());
@@ -70,7 +69,6 @@ namespace CelupartsPoC.Controllers
             dbRequest.Result.DeliveryAddress = requestR.DeliveryAddress;
             dbRequest.Result.PickUpTime = requestR.PickUpTime;
             dbRequest.Result.PaymentMethod = requestR.PaymentMethod;
-            dbRequest.Result.Status = requestR.Status;
             dbRequest.Result.Quote = requestR.Quote;
             dbRequest.Result.StatusQuote = requestR.StatusQuote;
 

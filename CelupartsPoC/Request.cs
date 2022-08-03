@@ -19,11 +19,10 @@ namespace CelupartsPoC
         public string DeliveryAddress { get; set; } = string.Empty;
         public DateTime PickUpTime { get; set; }
         public string PaymentMethod { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
         public int Quote { get; set; } = 0;
         public string StatusQuote { get; set; } = string.Empty;
         public virtual List<Equipment>? Equipments { get; set; } = new List<Equipment>()!;
-        public virtual List<RequestState> RequestStates { get; set; } = new List<RequestState>()!;
+        public virtual List<RequestStatus> RequestStatus { get; set; } = new List<RequestStatus>()!;
     }
 
     public class RequestWithEquipments
@@ -40,10 +39,9 @@ namespace CelupartsPoC
         public string DeliveryAddress { get; set; } = string.Empty;
         public DateTime PickUpTime { get; set; }
         public string PaymentMethod { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
         public int Quote { get; set; } = 0;
         public string StatusQuote { get; set; } = string.Empty;
         public virtual List<Equipment>? Equipments { get; set; } = new List<Equipment>()!;
-        public virtual List<RequestState> RequestStates { get; set; } = new List<RequestState>()!;
+        public virtual List<RequestStatus> RequestStatus { get; set; } = new List<RequestStatus>()!;
     }
 }

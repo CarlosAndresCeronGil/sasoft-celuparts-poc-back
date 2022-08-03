@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220803142819_EleventhMigrationCelupartsPoC")]
+    partial class EleventhMigrationCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,11 +133,11 @@ namespace CelupartsPoC.Migrations
 
             modelBuilder.Entity("CelupartsPoC.RequestStatus", b =>
                 {
-                    b.Property<int>("IdRequestStatus")
+                    b.Property<int>("IdRequestState")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRequestStatus"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRequestState"), 1L, 1);
 
                     b.Property<int>("IdRequest")
                         .HasColumnType("int");
@@ -151,7 +153,7 @@ namespace CelupartsPoC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdRequestStatus");
+                    b.HasKey("IdRequestState");
 
                     b.HasIndex("IdRequest");
 
@@ -264,7 +266,7 @@ namespace CelupartsPoC.Migrations
             modelBuilder.Entity("CelupartsPoC.RequestStatus", b =>
                 {
                     b.HasOne("CelupartsPoC.Request", "Request")
-                        .WithMany("RequestStatus")
+                        .WithMany("RequestStates")
                         .HasForeignKey("IdRequest")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -276,7 +278,7 @@ namespace CelupartsPoC.Migrations
                 {
                     b.Navigation("Equipments");
 
-                    b.Navigation("RequestStatus");
+                    b.Navigation("RequestStates");
                 });
 
             modelBuilder.Entity("CelupartsPoC.UserDto", b =>
