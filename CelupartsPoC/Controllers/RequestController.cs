@@ -21,14 +21,11 @@ namespace CelupartsPoC.Controllers
             {
                 IdRequest = request.IdRequest,
                 IdUser = request.IdUser,
+                IdEquipment = request.IdEquipment,
                 RequestType = request.RequestType,
                 PickUpAddress = request.PickUpAddress,
                 DeliveryAddress = request.DeliveryAddress,
-                PickUpTime = request.PickUpTime,
-                PaymentMethod = request.PaymentMethod,
-                Quote = request.Quote,
                 StatusQuote = request.StatusQuote,
-                Equipments = request.Equipments.Select(n => n).ToList(),
                 RequestStatus = request.RequestStatus.Select(n => n).ToList(),
             }).ToList();
 
@@ -64,12 +61,10 @@ namespace CelupartsPoC.Controllers
                 return BadRequest("Request not found!");
             }
             dbRequest.Result.IdUser = requestR.IdUser;
+            dbRequest.Result.IdEquipment = requestR.IdEquipment;
             dbRequest.Result.RequestType = requestR.RequestType;
             dbRequest.Result.PickUpAddress = requestR.PickUpAddress;
             dbRequest.Result.DeliveryAddress = requestR.DeliveryAddress;
-            dbRequest.Result.PickUpTime = requestR.PickUpTime;
-            dbRequest.Result.PaymentMethod = requestR.PaymentMethod;
-            dbRequest.Result.Quote = requestR.Quote;
             dbRequest.Result.StatusQuote = requestR.StatusQuote;
 
             await _context.SaveChangesAsync();

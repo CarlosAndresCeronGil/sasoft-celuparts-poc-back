@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220804220825_ThirteenthMigrationCelupartsPoC")]
+    partial class ThirteenthMigrationCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +31,6 @@ namespace CelupartsPoC.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCourier"), 1L, 1);
-
-                    b.Property<string>("AccountStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -74,6 +72,9 @@ namespace CelupartsPoC.Migrations
                     b.Property<string>("EquipmentInvoice")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdRequest")
+                        .HasColumnType("int");
 
                     b.Property<string>("Imei")
                         .IsRequired()
@@ -285,7 +286,7 @@ namespace CelupartsPoC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Surnames")
+                    b.Property<string>("surnames")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

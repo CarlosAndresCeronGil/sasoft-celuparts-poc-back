@@ -48,7 +48,6 @@ namespace CelupartsPoC.Controllers
             {
                 return BadRequest("Equipment not found!");
             }
-            dbEquipment.Result.IdRequest = request.IdRequest;
             dbEquipment.Result.TypeOfEquipment = request.TypeOfEquipment;
             dbEquipment.Result.EquipmentBrand = request.EquipmentBrand;
             dbEquipment.Result.ModelOrReference = request.ModelOrReference;

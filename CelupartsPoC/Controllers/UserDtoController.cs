@@ -18,7 +18,7 @@ namespace CelupartsPoC.Controllers
         [HttpGet]
         public async Task<ActionResult<List<UserDto>>> Get()
         {
-            var userDtoWithRequests = _context.UsersDto.Select(userDto => new UserDtoWithRequests()
+            /*var userDtoWithRequests = _context.UsersDto.Select(userDto => new UserDtoWithRequests()
             {
                 IdUser = userDto.IdUser,
                 IdType = userDto.IdType,
@@ -30,7 +30,10 @@ namespace CelupartsPoC.Controllers
                 Email = userDto.Email,
                 AccountStatus = userDto.AccountStatus,
                 Requests = userDto.Requests.Select(n => n).ToList()
-            }).ToList();
+            }).ToList();*/
+            var userDtoWithRequests = _context.UsersDto
+                .Include(x => x.Requests)
+                    .ThenInclude(y => y.RequestStatus);
 
             return Ok(userDtoWithRequests);
         }
