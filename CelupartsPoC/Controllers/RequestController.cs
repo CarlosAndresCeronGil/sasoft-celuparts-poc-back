@@ -17,7 +17,7 @@ namespace CelupartsPoC.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Request>>> Get()
         {
-            var requestWithEquipments = _context.Request.Select(request => new RequestWithEquipments()
+            /*var requestWithEquipments = _context.Request.Select(request => new RequestWithEquipments()
             {
                 IdRequest = request.IdRequest,
                 IdUser = request.IdUser,
@@ -27,9 +27,13 @@ namespace CelupartsPoC.Controllers
                 DeliveryAddress = request.DeliveryAddress,
                 StatusQuote = request.StatusQuote,
                 RequestStatus = request.RequestStatus.Select(n => n).ToList(),
-            }).ToList();
-
-            return Ok(await _context.Request.ToListAsync());
+            }).ToList();*/
+            var requests = _context.Request
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.RequestStatus)
+                .Include(x => x.HomeServices);
+            return Ok(requests);
         }
 
         [HttpGet("{id}")]

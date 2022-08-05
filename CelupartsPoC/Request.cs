@@ -23,9 +23,9 @@ namespace CelupartsPoC
         public string PickUpAddress { get; set; } = string.Empty;
         public string DeliveryAddress { get; set; } = string.Empty;
         public string StatusQuote { get; set; } = string.Empty;
-        public virtual List<Equipment>? Equipments { get; set; } = new List<Equipment>()!;
         public virtual List<RequestStatus> RequestStatus { get; set; } = new List<RequestStatus>()!;
         public virtual List<Repair> Repairs { get; set; } = new List<Repair>();
+        public virtual List<HomeService> HomeServices { get; set; } = new List<HomeService>();
     }
 
     public class RequestWithEquipments

@@ -13,5 +13,6 @@ namespace CelupartsPoC
         public string ModelOrReference { get; set; } = string.Empty;
         public string Imei { get; set; } = string.Empty;
         public string EquipmentInvoice { get; set; } = string.Empty;
+        public virtual List<Request> Requests { get; set; } = new List<Request>();
     }
 }
