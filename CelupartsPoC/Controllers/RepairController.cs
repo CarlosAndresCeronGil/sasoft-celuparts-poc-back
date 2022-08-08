@@ -26,7 +26,7 @@ namespace CelupartsPoC.Controllers
             var repair = _context.Repair.FindAsync(id);
             if (repair.Result == null)
             {
-                return BadRequest("Product review not found!");
+                return BadRequest("Repair not found!");
             }
             return Ok(repair.Result);
         }
@@ -41,18 +41,18 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<Repair>>> UpdateProductReview(Repair request)
+        public async Task<ActionResult<List<Repair>>> UpdateRepair(Repair request)
         {
-            var dbProductReview = _context.Repair.FindAsync(request.IdRepair);
-            if (dbProductReview.Result == null)
+            var dbRepair = _context.Repair.FindAsync(request.IdRepair);
+            if (dbRepair.Result == null)
             {
-                return BadRequest("Product review not found!");
+                return BadRequest("Repair not found!");
             }
-            dbProductReview.Result.IdRequest = request.IdRequest;
-            dbProductReview.Result.IdTechnician = request.IdTechnician;
-            dbProductReview.Result.RepairDate = request.RepairDate;
-            dbProductReview.Result.DeviceDiagnostic = request.DeviceDiagnostic;
-            dbProductReview.Result.RepairQuote = request.RepairQuote;
+            dbRepair.Result.IdRequest = request.IdRequest;
+            dbRepair.Result.IdTechnician = request.IdTechnician;
+            dbRepair.Result.RepairDate = request.RepairDate;
+            dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
+            dbRepair.Result.RepairQuote = request.RepairQuote;
 
             await _context.SaveChangesAsync();
 
@@ -62,12 +62,12 @@ namespace CelupartsPoC.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Repair>>> Delete(int id)
         {
-            var dbProductReview = _context.Repair.FindAsync(id);
-            if (dbProductReview.Result == null)
+            var dbRepair = _context.Repair.FindAsync(id);
+            if (dbRepair.Result == null)
             {
-                return BadRequest("Product review not found!");
+                return BadRequest("Repair not found!");
             }
-            _context.Repair.Remove(dbProductReview.Result);
+            _context.Repair.Remove(dbRepair.Result);
             await _context.SaveChangesAsync();
             return Ok(await _context.Repair.ToListAsync());
         }
