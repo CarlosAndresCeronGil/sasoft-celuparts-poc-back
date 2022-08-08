@@ -19,7 +19,7 @@ namespace CelupartsPoC
         [JsonIgnore]
         public virtual Technician? Technician { get; set; }
 
-        public DateTime RepairDate { get; set; }
+        public DateTime? RepairDate { get; set; }
         public string DeviceDiagnostic { get; set; } = string.Empty;
         public string RepairQuote { get; set; } = string.Empty;
         public virtual List<RepairPayment> RepairPayments { get; set; } = new List<RepairPayment>();
