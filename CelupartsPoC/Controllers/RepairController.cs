@@ -32,12 +32,12 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Repair>>> AddProductReview(Repair productReview)
+        public async Task<ActionResult<List<Repair>>> AddProductReview(Repair repair)
         {
-            _context.Repair.Add(productReview);
+            _context.Repair.Add(repair);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Repair.ToListAsync());
+            return Ok(await _context.Repair.FindAsync(repair.IdRepair));
         }
 
         [HttpPut]

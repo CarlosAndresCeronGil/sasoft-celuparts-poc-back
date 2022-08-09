@@ -39,7 +39,7 @@ namespace CelupartsPoC.Controllers
             _context.Equipment.Add(equipment);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Equipment.ToListAsync());
+            return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
         }
 
         [HttpPut]

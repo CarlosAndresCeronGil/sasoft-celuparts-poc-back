@@ -33,7 +33,12 @@ namespace CelupartsPoC.Controllers
             }).ToList();*/
             var userDtoWithRequests = _context.UsersDto
                 .Include(x => x.Requests)
-                    .ThenInclude(y => y.RequestStatus);
+                    .ThenInclude(y => y.RequestStatus)
+                .Include(x => x.Requests)
+                    .ThenInclude(y => y.Repairs)
+                    .ThenInclude(w => w.RepairPayments)
+                .Include(x => x.Requests)
+                    .ThenInclude(y => y.HomeServices);
 
             return Ok(userDtoWithRequests);
         }
@@ -41,12 +46,7 @@ namespace CelupartsPoC.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> Get(int id)
         {
-            /*var user = _context.UsersDto.FindAsync(id);
-            if(user.Result == null)
-            {
-                return BadRequest("User not found!");
-            }*/
-            var userDtoWithRequests = _context.UsersDto.Where(n => n.IdUser == id).Select(userDto => new UserDtoWithRequests()
+            /*var userDtoWithRequests = _context.UsersDto.Where(n => n.IdUser == id).Select(userDto => new UserDtoWithRequests()
             {
                 IdUser = userDto.IdUser,
                 IdType = userDto.IdType,
@@ -57,8 +57,16 @@ namespace CelupartsPoC.Controllers
                 Email = userDto.Email,
                 AccountStatus = userDto.AccountStatus,
                 Requests = userDto.Requests.Select(n => n).ToList()
-            }).FirstOrDefault();
-            return Ok(userDtoWithRequests);
+            }).FirstOrDefault();*/
+            var userDto = _context.UsersDto.Where(n => n.IdUser == id)
+                .Include(x => x.Requests)
+                    .ThenInclude(y => y.RequestStatus)
+                .Include(x => x.Requests)
+                    .ThenInclude(y => y.Repairs)
+                    .ThenInclude(w => w.RepairPayments)
+                .Include(x => x.Requests)
+                    .ThenInclude(y => y.HomeServices);
+            return Ok(userDto);
         }
 
         [HttpPost]
