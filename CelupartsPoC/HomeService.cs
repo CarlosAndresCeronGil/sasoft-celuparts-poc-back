@@ -20,6 +20,6 @@ namespace CelupartsPoC
         public virtual Courier? Courier { get; set; }
 
         public DateTime PickUpDate { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
     }
 }

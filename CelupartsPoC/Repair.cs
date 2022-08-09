@@ -14,7 +14,7 @@ namespace CelupartsPoC
         [JsonIgnore]
         public virtual Request? Request { get; set; }
 
-        public int IdTechnician { get; set; }
+        public int? IdTechnician { get; set; }
         [ForeignKey("IdTechnician")]
         [JsonIgnore]
         public virtual Technician? Technician { get; set; }

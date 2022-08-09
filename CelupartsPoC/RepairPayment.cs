@@ -16,6 +16,6 @@ namespace CelupartsPoC
 
         public string PaymentMethod { get; set; } = string.Empty;
         public string BillPayment { get; set; } = string.Empty;
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
     }
 }
