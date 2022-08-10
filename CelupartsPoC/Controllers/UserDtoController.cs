@@ -38,7 +38,9 @@ namespace CelupartsPoC.Controllers
                     .ThenInclude(y => y.Repairs)
                     .ThenInclude(w => w.RepairPayments)
                 .Include(x => x.Requests)
-                    .ThenInclude(y => y.HomeServices);
+                    .ThenInclude(y => y.HomeServices)
+                .Include(x => x.Requests)
+                    .ThenInclude(y => y.Equipment);
 
             return Ok(userDtoWithRequests);
         }
@@ -65,7 +67,9 @@ namespace CelupartsPoC.Controllers
                     .ThenInclude(y => y.Repairs)
                     .ThenInclude(w => w.RepairPayments)
                 .Include(x => x.Requests)
-                    .ThenInclude(y => y.HomeServices);
+                    .ThenInclude(y => y.HomeServices)
+                .Include(x => x.Requests)
+                    .ThenInclude(y => y.Equipment);
             return Ok(userDto);
         }
 

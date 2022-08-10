@@ -10,7 +10,7 @@ namespace CelupartsPoC.Data
         }
 
         public DbSet<UserDto> UsersDto { get; set; }
-        public DbSet<Request> Request { get; set; }
+        public DbSet<RequestWithEquipments> Request { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<RequestStatus> RequestStatus { get; set; }

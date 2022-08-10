@@ -15,7 +15,7 @@ namespace CelupartsPoC
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string AccountStatus { get; set; } = string.Empty;
-        public virtual List<Request>? Requests { get; set; } = new List<Request>()!;
+        public virtual List<RequestWithEquipments>? Requests { get; set; } = new List<RequestWithEquipments>()!;
     }
 
     public class UserDtoWithRequests
@@ -29,6 +29,6 @@ namespace CelupartsPoC
         public string AlternativePhone { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string AccountStatus { get; set; } = string.Empty;
-        public virtual List<Request>? Requests { get; set; } = new List<Request>()!;
+        public virtual List<RequestWithEquipments>? Requests { get; set; } = new List<RequestWithEquipments>()!;
     }
 }

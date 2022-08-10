@@ -15,9 +15,9 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Request>>> Get()
+        public async Task<ActionResult<List<RequestWithEquipments>>> Get()
         {
-            /*var requestWithEquipments = _context.Request.Select(request => new RequestWithEquipments()
+            /*var requestWithEquipments = _context.Request.Select(request => new RequestWithoutCycle()
             {
                 IdRequest = request.IdRequest,
                 IdUser = request.IdUser,
@@ -32,12 +32,13 @@ namespace CelupartsPoC.Controllers
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
-                .Include(x => x.HomeServices);
+                .Include(x => x.HomeServices)
+                .Include(x => x.Equipment);
             return Ok(requests);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Request>> Get(int id)
+        public async Task<ActionResult<RequestWithEquipments>> Get(int id)
         {
             var request = _context.Request.FindAsync(id);
             if(request.Result == null)
@@ -48,7 +49,7 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Request>>> AddUser(Request request)
+        public async Task<ActionResult<List<RequestWithEquipments>>> AddUser(RequestWithEquipments request)
         {
             _context.Request.Add(request);
             await _context.SaveChangesAsync();
@@ -57,7 +58,7 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<Request>>> UpdateRequest(Request requestR)
+        public async Task<ActionResult<List<RequestWithEquipments>>> UpdateRequest(RequestWithEquipments requestR)
         {
             var dbRequest = _context.Request.FindAsync(requestR.IdRequest);
             if (dbRequest.Result == null)
@@ -77,7 +78,7 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Request>>> Delete(int id)
+        public async Task<ActionResult<List<RequestWithEquipments>>> Delete(int id)
         {
             var dbRequest = _context.Request.FindAsync(id);
             if (dbRequest.Result == null)
