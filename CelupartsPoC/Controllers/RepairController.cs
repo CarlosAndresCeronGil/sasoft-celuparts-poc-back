@@ -17,7 +17,8 @@ namespace CelupartsPoC.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Repair>>> Get()
         {
-            return Ok(await _context.Repair.ToListAsync());
+            var repairs = _context.Repair.Include(x => x.Technician);
+            return Ok(repairs);
         }
 
         [HttpGet("{id}")]

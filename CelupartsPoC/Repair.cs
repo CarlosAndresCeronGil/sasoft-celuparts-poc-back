@@ -16,7 +16,7 @@ namespace CelupartsPoC
 
         public int? IdTechnician { get; set; }
         [ForeignKey("IdTechnician")]
-        [JsonIgnore]
+        
         public virtual Technician? Technician { get; set; }
 
         public DateTime? RepairDate { get; set; }
