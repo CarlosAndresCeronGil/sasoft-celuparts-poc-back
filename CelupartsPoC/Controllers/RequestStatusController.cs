@@ -52,6 +52,7 @@ namespace CelupartsPoC.Controllers
             dbRequestState.Result.Status = request.Status;
             dbRequestState.Result.PaymentStatus = request.PaymentStatus;
             dbRequestState.Result.ProductReturned = request.ProductReturned;
+            dbRequestState.Result.ProductSold = request.ProductSold;
 
             await _context.SaveChangesAsync();
 

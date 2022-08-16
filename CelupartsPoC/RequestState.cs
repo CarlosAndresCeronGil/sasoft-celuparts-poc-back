@@ -16,5 +16,6 @@ namespace CelupartsPoC
         public string Status { get; set; } = string.Empty;
         public string PaymentStatus { get; set; } = string.Empty;
         public bool ProductReturned { get; set; }
+        public bool ProductSold { get; set; }
     }
 }

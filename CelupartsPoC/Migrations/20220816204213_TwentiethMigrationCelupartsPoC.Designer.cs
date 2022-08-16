@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220816204213_TwentiethMigrationCelupartsPoC")]
+    partial class TwentiethMigrationCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,9 +204,6 @@ namespace CelupartsPoC.Migrations
                     b.Property<bool>("ProductReturned")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ProductSold")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -292,7 +291,7 @@ namespace CelupartsPoC.Migrations
                     b.Property<int>("IdRetoma")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("PaymentDate")
+                    b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
@@ -498,7 +497,7 @@ namespace CelupartsPoC.Migrations
             modelBuilder.Entity("CelupartsPoC.RetomaPayment", b =>
                 {
                     b.HasOne("CelupartsPoC.Retoma", "Retoma")
-                        .WithMany("RetomaPayments")
+                        .WithMany()
                         .HasForeignKey("IdRetoma")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -518,11 +517,6 @@ namespace CelupartsPoC.Migrations
                     b.Navigation("Repairs");
 
                     b.Navigation("RequestStatus");
-                });
-
-            modelBuilder.Entity("CelupartsPoC.Retoma", b =>
-                {
-                    b.Navigation("RetomaPayments");
                 });
 
             modelBuilder.Entity("CelupartsPoC.UserDto", b =>

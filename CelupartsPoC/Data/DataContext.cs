@@ -19,5 +19,7 @@ namespace CelupartsPoC.Data
         public DbSet<RepairPayment> RepairPayment { get; set; }
         public DbSet<Courier> Courier { get; set; }
         public DbSet<HomeService> HomeService { get; set;  }
+        public DbSet<Retoma> Retoma { get; set; }
+        public DbSet<RetomaPayment> RetomaPayment { get; set; }
     }
 }
