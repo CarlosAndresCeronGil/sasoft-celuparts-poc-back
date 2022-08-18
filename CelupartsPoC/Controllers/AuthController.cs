@@ -28,13 +28,21 @@ namespace CelupartsPoC.Controllers
             
             User user = new User();
 
+            _context.UsersDto.Add(request);
+
+            await _context.SaveChangesAsync();
+
+            var userDto = _context.UsersDto.FindAsync(request.IdUser);
+
             user.Email = request.Email;
+            user.IdUserDto = userDto.Result.IdUser;
+            user.Role = "user";
+            user.FullName = request.Names + " " + request.Surnames;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
             _context.User.Add(user);
-            _context.UsersDto.Add(request);
-
+            
             await _context.SaveChangesAsync();
 
             return Ok(user);
@@ -62,7 +70,10 @@ namespace CelupartsPoC.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim("email", user.Email),
+                new Claim("name", user.FullName),
+                new Claim("role", user.Role),
+                new Claim("idUser", user.IdUserDto.ToString()),
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

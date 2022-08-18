@@ -25,5 +25,6 @@ namespace CelupartsPoC
         public virtual List<RequestStatus> RequestStatus { get; set; } = new List<RequestStatus>()!;
         public virtual List<Repair> Repairs { get; set; } = new List<Repair>();
         public virtual List<HomeService> HomeServices { get; set; } = new List<HomeService>();
+        public virtual List<Retoma> Retoma { get; set; } = new List<Retoma>();
     }
 }

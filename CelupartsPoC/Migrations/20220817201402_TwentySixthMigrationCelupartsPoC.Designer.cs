@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220817201402_TwentySixthMigrationCelupartsPoC")]
+    partial class TwentySixthMigrationCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,9 +272,6 @@ namespace CelupartsPoC.Migrations
                     b.Property<int>("IdRequest")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdTechnician")
-                        .HasColumnType("int");
-
                     b.Property<string>("RetomaQuote")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -280,8 +279,6 @@ namespace CelupartsPoC.Migrations
                     b.HasKey("IdRetoma");
 
                     b.HasIndex("IdRequest");
-
-                    b.HasIndex("IdTechnician");
 
                     b.ToTable("Retoma");
                 });
@@ -508,13 +505,7 @@ namespace CelupartsPoC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CelupartsPoC.Technician", "Technician")
-                        .WithMany()
-                        .HasForeignKey("IdTechnician");
-
                     b.Navigation("Request");
-
-                    b.Navigation("Technician");
                 });
 
             modelBuilder.Entity("CelupartsPoC.RetomaPayment", b =>

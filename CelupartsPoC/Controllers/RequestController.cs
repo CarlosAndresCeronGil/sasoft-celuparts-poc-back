@@ -33,7 +33,9 @@ namespace CelupartsPoC.Controllers
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
                 .Include(x => x.HomeServices)
-                .Include(x => x.Equipment);
+                .Include(x => x.Equipment)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.RetomaPayments);
             return Ok(requests);
         }
 

@@ -49,6 +49,7 @@ namespace CelupartsPoC.Controllers
                 return BadRequest("Retoma not found!");
             }
             dbRetoma.Result.IdRequest = request.IdRequest;
+            dbRetoma.Result.IdTechnician = request.IdTechnician;
             dbRetoma.Result.RetomaQuote = request.RetomaQuote;
             dbRetoma.Result.DeviceDiagnostic = request.DeviceDiagnostic;
 

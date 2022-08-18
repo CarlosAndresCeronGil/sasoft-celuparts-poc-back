@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220817195932_TwentyFifthMigrationCelupartsPoC")]
+    partial class TwentyFifthMigrationCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,9 +272,6 @@ namespace CelupartsPoC.Migrations
                     b.Property<int>("IdRequest")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdTechnician")
-                        .HasColumnType("int");
-
                     b.Property<string>("RetomaQuote")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -280,8 +279,6 @@ namespace CelupartsPoC.Migrations
                     b.HasKey("IdRetoma");
 
                     b.HasIndex("IdRequest");
-
-                    b.HasIndex("IdTechnician");
 
                     b.ToTable("Retoma");
                 });
@@ -364,7 +361,7 @@ namespace CelupartsPoC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("IdUserDto")
+                    b.Property<int?>("IdUser")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("PasswordHash")
@@ -378,6 +375,8 @@ namespace CelupartsPoC.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdUser");
 
                     b.ToTable("User");
                 });
@@ -508,13 +507,7 @@ namespace CelupartsPoC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CelupartsPoC.Technician", "Technician")
-                        .WithMany()
-                        .HasForeignKey("IdTechnician");
-
                     b.Navigation("Request");
-
-                    b.Navigation("Technician");
                 });
 
             modelBuilder.Entity("CelupartsPoC.RetomaPayment", b =>
@@ -526,6 +519,15 @@ namespace CelupartsPoC.Migrations
                         .IsRequired();
 
                     b.Navigation("Retoma");
+                });
+
+            modelBuilder.Entity("CelupartsPoC.User", b =>
+                {
+                    b.HasOne("CelupartsPoC.UserDto", "UserDto")
+                        .WithMany()
+                        .HasForeignKey("IdUser");
+
+                    b.Navigation("UserDto");
                 });
 
             modelBuilder.Entity("CelupartsPoC.Repair", b =>
