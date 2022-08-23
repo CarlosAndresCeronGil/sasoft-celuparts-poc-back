@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CelupartsPoC.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
-    public class SiigoCaralogController : ControllerBase
+    public class SiigoCatalogController : ControllerBase
     {
         private HttpClient _client;
         string pathAccountGroups = "https://api.siigo.com/v1/account-groups";
@@ -18,13 +18,13 @@ namespace CelupartsPoC.Controllers
         string pathCostCenters = "https://api.siigo.com/v1/cost-centers";
         string pathFixedAssets = "https://api.siigo.com/v1/fixed-assets";
 
-        public SiigoCaralogController(HttpClient client)
+        public SiigoCatalogController(HttpClient client)
         {
             _client = client;
-            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $"eyJhbGciOiJSUzI1NiIsImtpZCI6IkQ3OTkxNEU2MTJFRkI4NjE5RDNFQ0U4REFGQTU0RDFBMDdCQjM5QjJSUzI1NiIsInR5cCI6ImF0K2p3dCIsIng1dCI6IjE1a1U1aEx2dUdHZFBzNk5yNlZOR2dlN09iSSJ9.eyJuYmYiOjE2NjExODczMzIsImV4cCI6MTY2MTI3MzczMiwiaXNzIjoiaHR0cDovL21zLXNlY3VyaXR5c2VydmljZTo1MDAwIiwiYXVkIjoiaHR0cDovL21zLXNlY3VyaXR5c2VydmljZTo1MDAwL3Jlc291cmNlcyIsImNsaWVudF9pZCI6IlNpaWdvQVBJIiwic3ViIjoiMTAxODMxNSIsImF1dGhfdGltZSI6MTY2MTE4NzMzMiwiaWRwIjoibG9jYWwiLCJuYW1lIjoic2lpZ29hcGlAcHJ1ZWJhcy5jb20iLCJtYWlsX3NpaWdvIjoic2lpZ29hcGlAcHJ1ZWJhcy5jb20iLCJjbG91ZF90ZW5hbnRfY29tcGFueV9rZXkiOiJTaWlnb0FQSSIsInVzZXJzX2lkIjoiNjI5IiwidGVuYW50X2lkIjoiMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDM5MjIwMSIsInVzZXJfbGljZW5zZV90eXBlIjoiMCIsInBsYW5fdHlwZSI6IjE0IiwidGVuYW50X3N0YXRlIjoiMSIsIm11bHRpdGVuYW50X2lkIjoiNDA4IiwiY29tcGFuaWVzIjoiMCIsImFwaV9zdWJzY3JpcHRpb25fa2V5IjoiNTYyZTNhMTViMTQ4NDg2ZDkyMTYxYjdhZmNiODdmM2MiLCJhY2NvdW50YW50IjoiZmFsc2UiLCJqdGkiOiI1NERDRTc5NkVGNUVBNkU3OUIwOUMxNTQ1NkJGRjMyMSIsImlhdCI6MTY2MTE4NzMzMiwic2NvcGUiOlsiU2lpZ29BUEkiXSwiYW1yIjpbImN1c3RvbSJdfQ.BPIDXF1j1alNe0wUQiHAVllQvc7zqjCUqxVnnFn65SOcOCr8ikJh5hxvACd7sfkAsblMaCg5mywz8l3CiPYcuh_OviEpzSFwFlCBUKoEBi3LdWHlHK46qS2Ez2vMs33H22BhU9Uu9RIKpu8lH4ESQbYOEN2quiqiwNjd7f-P0SfJaGLeO5FLxDdmXfo7eFUjyCrSmaQK-fZCvZKDVFWR6WonnGOh823Nnajdk2lC21gdwn5lPdtIqVjj9yBQLrcsnwfWe3prZMZRHhREgt0re-aVcoEA2faogdrtkiDn39_5lXdBI7cFezkknERAA4Psd08w5-fLPV9f2lueQMH5cg");
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $"eyJhbGciOiJSUzI1NiIsImtpZCI6IkQ3OTkxNEU2MTJFRkI4NjE5RDNFQ0U4REFGQTU0RDFBMDdCQjM5QjJSUzI1NiIsInR5cCI6ImF0K2p3dCIsIng1dCI6IjE1a1U1aEx2dUdHZFBzNk5yNlZOR2dlN09iSSJ9.eyJuYmYiOjE2NjEyNjQ5NzIsImV4cCI6MTY2MTM1MTM3MiwiaXNzIjoiaHR0cDovL21zLXNlY3VyaXR5c2VydmljZTo1MDAwIiwiYXVkIjoiaHR0cDovL21zLXNlY3VyaXR5c2VydmljZTo1MDAwL3Jlc291cmNlcyIsImNsaWVudF9pZCI6IlNpaWdvQVBJIiwic3ViIjoiMTAxODMxNSIsImF1dGhfdGltZSI6MTY2MTI2NDk3MiwiaWRwIjoibG9jYWwiLCJuYW1lIjoic2lpZ29hcGlAcHJ1ZWJhcy5jb20iLCJtYWlsX3NpaWdvIjoic2lpZ29hcGlAcHJ1ZWJhcy5jb20iLCJjbG91ZF90ZW5hbnRfY29tcGFueV9rZXkiOiJTaWlnb0FQSSIsInVzZXJzX2lkIjoiNjI5IiwidGVuYW50X2lkIjoiMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDM5MjIwMSIsInVzZXJfbGljZW5zZV90eXBlIjoiMCIsInBsYW5fdHlwZSI6IjE0IiwidGVuYW50X3N0YXRlIjoiMSIsIm11bHRpdGVuYW50X2lkIjoiNDA4IiwiY29tcGFuaWVzIjoiMCIsImFwaV9zdWJzY3JpcHRpb25fa2V5IjoiNTYyZTNhMTViMTQ4NDg2ZDkyMTYxYjdhZmNiODdmM2MiLCJhY2NvdW50YW50IjoiZmFsc2UiLCJqdGkiOiI4Njc4MjY5MTZENjYwRUY5QzNGRDVFQjFBMDQxMjAwNSIsImlhdCI6MTY2MTI2NDk3Miwic2NvcGUiOlsiU2lpZ29BUEkiXSwiYW1yIjpbImN1c3RvbSJdfQ.cwsAv3-NhYd84YjYYJbUjbmSHJ6XtTNbO1eqoejOMu5grT2lG8r2G9WY6rxiLQuItLUeQtqqYP2y2cU20Sc4HcE8zrN8b2W1CrQMjFUgurcmI6gqzpDq-T5eA8Rug9zPFxzGMggJM4a4TsdhxmIjfDaigosdZkIcuyvm56KjVVr7LKFUzncuXAVjVsuNj4NKXANNJodBPcZnSBgALQi7iCzWGoFvZSBjeeDELamnECxRyuCR1glOFrEu8nYIhuiZRiUVz2lnSKlyOMMoGIw0r9UDqo5INhDtxtQmrsjy_dOhVDa1kiIFPv9uX1IyTasgANBeIFoOSzTB5UXPsu9awg");
         }
 
-        [HttpGet("/AccountGroups")]
+        [HttpGet("AccountGroups")]
         public async Task<string> GetSiigoAccountGroupsAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathAccountGroups);
@@ -34,7 +34,7 @@ namespace CelupartsPoC.Controllers
             return json;
         }
 
-        [HttpGet("/Taxes")]
+        [HttpGet("Taxes")]
         public async Task<string> GetSiigoTaxesAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathTaxes);
@@ -44,7 +44,7 @@ namespace CelupartsPoC.Controllers
             return json;
         }
 
-        [HttpGet("/PriceList")]
+        [HttpGet("PriceList")]
         public async Task<string> GetSiigoPriceListAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathPriceList);
@@ -54,7 +54,7 @@ namespace CelupartsPoC.Controllers
             return json;
         }
 
-        [HttpGet("/WareHouses")]
+        [HttpGet("WareHouses")]
         public async Task<string> GetSiigoWareHousesAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathWareHouses);
@@ -64,7 +64,7 @@ namespace CelupartsPoC.Controllers
             return json;
         }
 
-        [HttpGet("/Users")]
+        [HttpGet("Users")]
         public async Task<string> GetSiigoUsersAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathUsers);
@@ -74,7 +74,7 @@ namespace CelupartsPoC.Controllers
             return json;
         }
 
-        [HttpGet("/DocumentTypes")]
+        [HttpGet("DocumentTypes")]
         public async Task<string> GetSiigoDocumentTypesAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathDocumentTypes);
@@ -84,7 +84,7 @@ namespace CelupartsPoC.Controllers
             return json;
         }
 
-        [HttpGet("/PaymentTypes")]
+        [HttpGet("PaymentTypes")]
         public async Task<string> GetSiigoPaymentTypesAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathPaymentTypes);
@@ -94,7 +94,7 @@ namespace CelupartsPoC.Controllers
             return json;
         }
 
-        [HttpGet("/CostCenters")]
+        [HttpGet("CostCenters")]
         public async Task<string> GetSiigoCostCentersTypesAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathCostCenters);
@@ -104,7 +104,7 @@ namespace CelupartsPoC.Controllers
             return json;
         }
 
-        [HttpGet("/FixedAssets")]
+        [HttpGet("FixedAssets")]
         public async Task<string> GetSiigoFixedAssetsAsync()
         {
             HttpResponseMessage response = await _client.GetAsync(pathFixedAssets);
