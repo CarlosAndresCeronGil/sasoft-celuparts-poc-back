@@ -21,5 +21,6 @@ namespace CelupartsPoC.Data
         public DbSet<HomeService> HomeService { get; set;  }
         public DbSet<Retoma> Retoma { get; set; }
         public DbSet<RetomaPayment> RetomaPayment { get; set; }
+        public DbSet<RequestNotification> RequestNotification { get; set; }
     }
 }
