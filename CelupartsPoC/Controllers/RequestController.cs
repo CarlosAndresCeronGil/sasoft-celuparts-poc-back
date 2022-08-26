@@ -43,12 +43,15 @@ namespace CelupartsPoC.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestWithEquipments>> Get(int id)
         {
-            var request = _context.Request.FindAsync(id);
-            if(request.Result == null)
+            //var request = _context.Request.FindAsync(id);
+            var request = _context.Request.Where(n => n.IdRequest == id)
+                .Include(x => x.HomeServices)
+                .Include(x => x.RequestStatus);
+            if(request == null)
             {
                 return BadRequest("Request not found!");
             }
-            return Ok(request.Result);
+            return Ok(request);
         }
 
         [HttpPost]
