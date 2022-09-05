@@ -108,6 +108,7 @@ namespace CelupartsPoC.Controllers
             dbUser.Result.Email = request.Email;
             dbUser.Result.AccountStatus = request.AccountStatus;
             dbUser.Result.IdNumber = request.IdNumber;
+            dbUser.Result.LoginAttempts = request.LoginAttempts;
 
             await _context.SaveChangesAsync();
 

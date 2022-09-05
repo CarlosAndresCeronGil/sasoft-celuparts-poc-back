@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CelupartsPoC.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -26,13 +27,28 @@ namespace CelupartsPoC.Controllers
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
             
+            //Creating two users, one for login other for compilation of data
             User user = new User();
+            UserDto NewUserDto = new UserDto();
 
-            _context.UsersDto.Add(request);
+            NewUserDto.IdType = request.IdType;
+            NewUserDto.IdNumber = request.IdNumber;
+            NewUserDto.Names = request.Names;
+            NewUserDto.Surnames = request.Surnames;
+            NewUserDto.Phone = request.Phone;
+            NewUserDto.AlternativePhone = request.AlternativePhone;
+            NewUserDto.Email = request.Email;
+            NewUserDto.Password = CommonMethods.ConvertToEncrypt(request.Password);
+            NewUserDto.AccountStatus = request.AccountStatus;
+            NewUserDto.LoginAttempts = 0;
+
+
+            _context.UsersDto.Add(NewUserDto);
+            //_context.UsersDto.Add(request);
 
             await _context.SaveChangesAsync();
 
-            var userDto = _context.UsersDto.FindAsync(request.IdUser);
+            var userDto = _context.UsersDto.FindAsync(NewUserDto.IdUser);
 
             user.Email = request.Email;
             user.IdUserDto = userDto.Result.IdUser;
@@ -52,14 +68,32 @@ namespace CelupartsPoC.Controllers
         public async Task<ActionResult<string>> LoginUser(UserDto request)
         {
             //var dbUser = _context.User.FindAsync(request.Email);
+            var dbUserDto = _context.UsersDto.Where(x => x.Email == request.Email).FirstOrDefault();
             var dbUser = _context.User.Where(x => x.Email == request.Email).FirstOrDefault();
             if(dbUser.Email != request.Email)
             {
                 return BadRequest("User not found!");
             }
-            if(!VerifyPasswordHash(request.Password, dbUser.PasswordHash, dbUser.PasswordSalt))
+            if (dbUserDto.AccountStatus == "Inhabilitada")
             {
+                return BadRequest("Account disabled");
+            } else if (!VerifyPasswordHash(request.Password, dbUser.PasswordHash, dbUser.PasswordSalt))
+            {
+                if(dbUserDto!.LoginAttempts >= 3)
+                {
+                    dbUserDto.AccountStatus = "Inhabilitada";
+                    await _context.SaveChangesAsync();
+                    return BadRequest("Account disabled");
+                } else
+                {
+                    dbUserDto!.LoginAttempts = dbUserDto.LoginAttempts + 1;
+                }
+                await _context.SaveChangesAsync();
                 return BadRequest("Wrong password!");
+            } else
+            {
+                dbUserDto!.LoginAttempts = 0;
+                await _context.SaveChangesAsync();
             }
 
             string token = CreateToken(dbUser);

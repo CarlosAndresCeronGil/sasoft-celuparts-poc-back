@@ -22,6 +22,7 @@ namespace CelupartsPoC
         public string PickUpAddress { get; set; } = string.Empty;
         public string DeliveryAddress { get; set; } = string.Empty;
         public string StatusQuote { get; set; } = string.Empty;
+        public DateTime RequestDate { get; set; } = new DateTime();
         public virtual List<RequestStatus> RequestStatus { get; set; } = new List<RequestStatus>()!;
         public virtual List<Repair> Repairs { get; set; } = new List<Repair>();
         public virtual List<HomeService> HomeServices { get; set; } = new List<HomeService>();

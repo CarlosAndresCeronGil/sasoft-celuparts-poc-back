@@ -57,6 +57,9 @@ namespace CelupartsPoC.Controllers
         [HttpPost]
         public async Task<ActionResult<List<RequestWithEquipments>>> AddUser(RequestWithEquipments request)
         {
+            //request.RequestDate = DateTime.UtcNow.Date; Devuelve 2022-09-05 00:00:00.0000000
+            //request.RequestDate = DateTime.Today; Devuelve 2022-09-05 00:00:00.0000000
+            request.RequestDate = DateTime.Today;
             _context.Request.Add(request);
             await _context.SaveChangesAsync();
 

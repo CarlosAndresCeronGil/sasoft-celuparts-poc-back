@@ -15,6 +15,7 @@ namespace CelupartsPoC
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string AccountStatus { get; set; } = string.Empty;
+        public int LoginAttempts { get; set; } = 0;
         public virtual List<RequestWithEquipments>? Requests { get; set; } = new List<RequestWithEquipments>()!;
     }
 
