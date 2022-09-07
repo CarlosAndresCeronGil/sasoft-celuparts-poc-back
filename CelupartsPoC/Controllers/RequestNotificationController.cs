@@ -21,6 +21,35 @@ namespace CelupartsPoC.Controllers
             return Ok(requestNotifications);
         }
 
+        [HttpGet("Admin")]
+        public async Task<ActionResult<List<RequestNotification>>> GetAdminNotifications()
+        {
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_admin").ToList();
+            return Ok(requestNotifications);
+        }
+
+        [HttpGet("Technician")]
+        public async Task<ActionResult<List<RequestNotification>>> GetTechnicianNotifications()
+        {
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_technician").ToList();
+            return Ok(requestNotifications);
+        }
+
+        [HttpGet("Courier")]
+        public async Task<ActionResult<List<RequestNotification>>> GetCourierNotifications()
+        {
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_courier").ToList();
+            return Ok(requestNotifications);
+        }
+
+        [HttpGet("Customer/{idRequest}")]
+        public async Task<ActionResult<List<RequestNotification>>> GetCustomerNotifications(int idRequest)
+        {
+            //var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_courier").ToList();
+            var requestNotifications = _context.RequestNotification.FromSqlRaw($"select RN.IdRequestNotification, RN.IdRequest, RN.Message, RN.HideNotification, RN.NotificationType from RequestNotification as RN join Request as R on R.IdRequest=RN.IdRequest where R.IdRequest={idRequest} AND RN.NotificationType='to_customer'");
+            return Ok(requestNotifications);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestNotification>> Get(int id)
         {

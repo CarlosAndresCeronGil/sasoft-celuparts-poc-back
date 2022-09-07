@@ -14,13 +14,17 @@ namespace CelupartsPoC.Controllers
             this._context = context;
         }
 
-        [HttpGet("Retomas/{page}")]
-        public async Task<ActionResult<List<RequestWithEquipments>>> GetRetomas(int page)
+        [HttpGet("Retomas/{page}/RequestDate")]
+        public async Task<ActionResult<List<RequestWithEquipments>>> GetRetomasByDate(int page, [FromQuery] DateTime InitialDate, [FromQuery] DateTime FinalDate)
         {
             var pageResults = 10f;
-            var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Count() / pageResults);
 
-            var requests = await _context.Request.Where(req => req.RequestType == "Retoma")
+            if (FinalDate == DateTime.MinValue) {
+
+                var pageCountWithoutFinalDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate >= InitialDate)).Count() / pageResults);
+
+                var requestsWithoutFinalDate = await _context.Request.Where(req => req.RequestType == "Retoma")
+                .Where((x => x.RequestDate >= InitialDate))
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
@@ -29,7 +33,64 @@ namespace CelupartsPoC.Controllers
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
-                .OrderBy(x => x.RequestDate)
+                .OrderByDescending(x => x.RequestDate)
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults)
+                .ToListAsync();
+
+                var responseWithoutFinalDate = new RequestResponse
+                {
+                    Requests = requestsWithoutFinalDate,
+                    CurrentPage = page,
+                    Pages = (int)pageCountWithoutFinalDate
+                };
+
+                return Ok(responseWithoutFinalDate);
+
+            } 
+            else if (InitialDate == DateTime.MinValue)
+            {
+
+                var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+
+                var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Retoma")
+                .Where((x => x.RequestDate <= FinalDate.AddDays(1)))
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.RequestStatus)
+                .Include(x => x.HomeServices)
+                .Include(x => x.Equipment)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.RequestNotifications)
+                .OrderByDescending(x => x.RequestDate)
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults)
+                .ToListAsync();
+
+                var responseWithoutInitialDate = new RequestResponse
+                {
+                    Requests = requestsWithoutInitialDate,
+                    CurrentPage = page,
+                    Pages = (int)pageCountWithoutInitialDate
+                };
+
+                return Ok(responseWithoutInitialDate);
+            }
+
+            var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+
+            var requests = await _context.Request.Where(req => req.RequestType == "Retoma")
+                .Where((x => x.RequestDate >= InitialDate && x.RequestDate  <= FinalDate.AddDays(1)))
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.RequestStatus)
+                .Include(x => x.HomeServices)
+                .Include(x => x.Equipment)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.RequestNotifications)
+                .OrderByDescending(x => x.RequestDate)
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
@@ -44,11 +105,17 @@ namespace CelupartsPoC.Controllers
             return Ok(response);
         }
 
-        [HttpGet("Retomas/RequestDate")]
-        public async Task<ActionResult<List<RequestWithEquipments>>> GetRetomasByDate([FromQuery] DateTime InitialDate, [FromQuery] DateTime FinalDate)
+        [HttpGet("Repairs/{page}/RequestDate")]
+        public async Task<ActionResult<List<RequestWithEquipments>>> GetRepairsByDate(int page, [FromQuery] DateTime InitialDate, [FromQuery] DateTime FinalDate)
         {
-            if(FinalDate == DateTime.MinValue) {
-                var requestsWithoutFinalDate = await _context.Request.Where(req => req.RequestType == "Retoma")
+            var pageResults = 10f;
+
+            if (FinalDate == DateTime.MinValue)
+            {
+
+                var pageCountWithoutFinalDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate)).Count() / pageResults);
+
+                var requestsWithoutFinalDate = await _context.Request.Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate >= InitialDate))
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
@@ -58,15 +125,27 @@ namespace CelupartsPoC.Controllers
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
-                .OrderBy(x => x.RequestDate)
+                .OrderByDescending(x => x.RequestDate)
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults)
                 .ToListAsync();
 
-                return Ok(requestsWithoutFinalDate);
+                var responseWithoutFinalDate = new RequestResponse
+                {
+                    Requests = requestsWithoutFinalDate,
+                    CurrentPage = page,
+                    Pages = (int)pageCountWithoutFinalDate
+                };
 
-            } 
+                return Ok(responseWithoutFinalDate);
+
+            }
             else if (InitialDate == DateTime.MinValue)
             {
-                var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Retoma")
+
+                var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+
+                var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate <= FinalDate.AddDays(1)))
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
@@ -76,34 +155,25 @@ namespace CelupartsPoC.Controllers
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
-                .OrderBy(x => x.RequestDate)
+                .OrderByDescending(x => x.RequestDate)
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults)
                 .ToListAsync();
 
-                return Ok(requestsWithoutInitialDate);
+                var responseWithoutInitialDate = new RequestResponse
+                {
+                    Requests = requestsWithoutInitialDate,
+                    CurrentPage = page,
+                    Pages = (int)pageCountWithoutInitialDate
+                };
+
+                return Ok(responseWithoutInitialDate);
             }
-            var requests = await _context.Request.Where(req => req.RequestType == "Retoma")
-                .Where((x => x.RequestDate >= InitialDate && x.RequestDate  <= FinalDate.AddDays(1)))
-                .Include(x => x.Repairs)
-                    .ThenInclude(y => y.RepairPayments)
-                .Include(x => x.RequestStatus)
-                .Include(x => x.HomeServices)
-                .Include(x => x.Equipment)
-                .Include(x => x.Retoma)
-                    .ThenInclude(y => y.RetomaPayments)
-                .Include(x => x.RequestNotifications)
-                .OrderBy(x => x.RequestDate)
-                .ToListAsync();
 
-            return Ok(requests);
-        }
-
-        [HttpGet("Repairs/{page}")]
-        public async Task<ActionResult<List<RequestWithEquipments>>> GetRepairs(int page)
-        {
-            var pageResults = 10f;
-            var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Count() / pageResults);
+            var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
 
             var requests = await _context.Request.Where(req => req.RequestType == "Reparacion")
+                .Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1)))
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
@@ -112,7 +182,7 @@ namespace CelupartsPoC.Controllers
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
-                .OrderBy(x => x.RequestDate)
+                .OrderByDescending(x => x.RequestDate)
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
