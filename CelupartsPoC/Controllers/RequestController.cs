@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CelupartsPoC.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CelupartsPoC.Controllers
@@ -8,26 +9,130 @@ namespace CelupartsPoC.Controllers
     public class RequestController : ControllerBase
     {
         private readonly DataContext _context;
+        private IRepositoryWrapper _repoWrapper;
 
-        public RequestController(DataContext context)
+        public RequestController(DataContext context, IRepositoryWrapper repoWrapper)
         {
             this._context = context;
+            this._repoWrapper = repoWrapper;
+        }
+
+        [HttpGet("Retomas/{page}")]
+        public async Task<ActionResult<List<RequestWithEquipments>>> GetRetomas(int page)
+        {
+            var pageResults = 10f;
+            var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Count() / pageResults);
+
+            var requests = await _context.Request.Where(req => req.RequestType == "Retoma")
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.RequestStatus)
+                .Include(x => x.HomeServices)
+                .Include(x => x.Equipment)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.RequestNotifications)
+                .OrderBy(x => x.RequestDate)
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults)
+                .ToListAsync();
+
+            var response = new RequestResponse
+            {
+                Requests = requests,
+                CurrentPage = page,
+                Pages = (int)pageCount
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("Retomas/RequestDate")]
+        public async Task<ActionResult<List<RequestWithEquipments>>> GetRetomasByDate([FromQuery] DateTime InitialDate, [FromQuery] DateTime FinalDate)
+        {
+            if(FinalDate == DateTime.MinValue) {
+                var requestsWithoutFinalDate = await _context.Request.Where(req => req.RequestType == "Retoma")
+                .Where((x => x.RequestDate >= InitialDate))
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.RequestStatus)
+                .Include(x => x.HomeServices)
+                .Include(x => x.Equipment)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.RequestNotifications)
+                .OrderBy(x => x.RequestDate)
+                .ToListAsync();
+
+                return Ok(requestsWithoutFinalDate);
+
+            } 
+            else if (InitialDate == DateTime.MinValue)
+            {
+                var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Retoma")
+                .Where((x => x.RequestDate <= FinalDate.AddDays(1)))
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.RequestStatus)
+                .Include(x => x.HomeServices)
+                .Include(x => x.Equipment)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.RequestNotifications)
+                .OrderBy(x => x.RequestDate)
+                .ToListAsync();
+
+                return Ok(requestsWithoutInitialDate);
+            }
+            var requests = await _context.Request.Where(req => req.RequestType == "Retoma")
+                .Where((x => x.RequestDate >= InitialDate && x.RequestDate  <= FinalDate.AddDays(1)))
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.RequestStatus)
+                .Include(x => x.HomeServices)
+                .Include(x => x.Equipment)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.RequestNotifications)
+                .OrderBy(x => x.RequestDate)
+                .ToListAsync();
+
+            return Ok(requests);
+        }
+
+        [HttpGet("Repairs/{page}")]
+        public async Task<ActionResult<List<RequestWithEquipments>>> GetRepairs(int page)
+        {
+            var pageResults = 10f;
+            var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Count() / pageResults);
+
+            var requests = await _context.Request.Where(req => req.RequestType == "Reparacion")
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.RequestStatus)
+                .Include(x => x.HomeServices)
+                .Include(x => x.Equipment)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.RequestNotifications)
+                .OrderBy(x => x.RequestDate)
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults)
+                .ToListAsync();
+
+            var response = new RequestResponse
+            {
+                Requests = requests,
+                CurrentPage = page,
+                Pages = (int)pageCount
+            };
+
+            return Ok(response);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<RequestWithEquipments>>> Get()
+        public async Task<ActionResult<List<RequestWithEquipments>>> GetAll()
         {
-            /*var requestWithEquipments = _context.Request.Select(request => new RequestWithoutCycle()
-            {
-                IdRequest = request.IdRequest,
-                IdUser = request.IdUser,
-                IdEquipment = request.IdEquipment,
-                RequestType = request.RequestType,
-                PickUpAddress = request.PickUpAddress,
-                DeliveryAddress = request.DeliveryAddress,
-                StatusQuote = request.StatusQuote,
-                RequestStatus = request.RequestStatus.Select(n => n).ToList(),
-            }).ToList();*/
             var requests = _context.Request
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
