@@ -1,5 +1,4 @@
-﻿using CelupartsPoC.Contracts;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CelupartsPoC.Controllers
@@ -9,12 +8,10 @@ namespace CelupartsPoC.Controllers
     public class RequestController : ControllerBase
     {
         private readonly DataContext _context;
-        private IRepositoryWrapper _repoWrapper;
 
-        public RequestController(DataContext context, IRepositoryWrapper repoWrapper)
+        public RequestController(DataContext context)
         {
             this._context = context;
-            this._repoWrapper = repoWrapper;
         }
 
         [HttpGet("Retomas/{page}")]
