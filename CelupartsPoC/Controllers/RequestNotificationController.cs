@@ -42,11 +42,11 @@ namespace CelupartsPoC.Controllers
             return Ok(requestNotifications);
         }
 
-        [HttpGet("Customer/{idRequest}")]
+        [HttpGet("Request/{idRequest}")]
         public async Task<ActionResult<List<RequestNotification>>> GetCustomerNotifications(int idRequest)
         {
             //var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_courier").ToList();
-            var requestNotifications = _context.RequestNotification.FromSqlRaw($"select RN.IdRequestNotification, RN.IdRequest, RN.Message, RN.HideNotification, RN.NotificationType from RequestNotification as RN join Request as R on R.IdRequest=RN.IdRequest where R.IdRequest={idRequest} AND RN.NotificationType='to_customer'");
+            var requestNotifications = _context.RequestNotification.FromSqlRaw($"select RN.IdRequestNotification, RN.IdRequest, RN.Message, RN.HideNotification, RN.NotificationType from RequestNotification as RN join Request as R on R.IdRequest=RN.IdRequest where R.IdRequest={idRequest}");
             return Ok(requestNotifications);
         }
 

@@ -43,6 +43,7 @@ namespace CelupartsPoC.Controllers
             NewUserDto.LoginAttempts = 0;
 
 
+
             _context.UsersDto.Add(NewUserDto);
             //_context.UsersDto.Add(request);
 
