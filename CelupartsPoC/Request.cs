@@ -11,7 +11,7 @@ namespace CelupartsPoC
 
         public int? IdUser { get; set; } 
         [ForeignKey("IdUser")]
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual UserDto? UserDto { get; set; }
 
         public int? IdEquipment { get; set; }

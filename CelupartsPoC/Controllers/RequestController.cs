@@ -23,8 +23,11 @@ namespace CelupartsPoC.Controllers
 
                 var pageCountWithoutFinalDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate >= InitialDate)).Count() / pageResults);
 
-                var requestsWithoutFinalDate = await _context.Request.Where(req => req.RequestType == "Retoma")
+                var lastDate = new DateTime(2020, 1, 1);
+
+                var requestsWithoutFinalDate = await _context.Request.AsNoTracking().Where(req => req.RequestType == "Retoma")
                 .Where((x => x.RequestDate >= InitialDate))
+                .Include(x => x.UserDto)
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
@@ -34,6 +37,7 @@ namespace CelupartsPoC.Controllers
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
                 .OrderByDescending(x => x.RequestDate)
+                //.Where(x => x.RequestDate > lastDate)
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
@@ -53,8 +57,11 @@ namespace CelupartsPoC.Controllers
 
                 var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
 
+                var lastDate = new DateTime(2020, 1, 1);
+
                 var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Retoma")
                 .Where((x => x.RequestDate <= FinalDate.AddDays(1)))
+                .Include(x => x.UserDto)
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
@@ -82,6 +89,7 @@ namespace CelupartsPoC.Controllers
 
             var requests = await _context.Request.Where(req => req.RequestType == "Retoma")
                 .Where((x => x.RequestDate >= InitialDate && x.RequestDate  <= FinalDate.AddDays(1)))
+                .Include(x => x.UserDto)
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)

@@ -52,7 +52,7 @@ namespace CelupartsPoC.Controllers
             dbEquipment.Result.TypeOfEquipment = request.TypeOfEquipment;
             dbEquipment.Result.EquipmentBrand = request.EquipmentBrand;
             dbEquipment.Result.ModelOrReference = request.ModelOrReference;
-            dbEquipment.Result.Imei = request.Imei;
+            dbEquipment.Result.ImeiOrSerial = request.ImeiOrSerial;
             dbEquipment.Result.EquipmentInvoice = request.EquipmentInvoice;
 
             await _context.SaveChangesAsync();
