@@ -32,13 +32,43 @@ namespace CelupartsPoC.Controllers
             return Ok(equipment.Result);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<ActionResult<List<Equipment>>> AddEquipment(Equipment equipment)
         {
             _context.Equipment.Add(equipment);
             await _context.SaveChangesAsync();
 
             return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
+        }*/
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<List<Equipment>>> AddEquipmentWithFile([FromForm] UploadModel uploadModel)
+        {
+            using (var ms = new System.IO.MemoryStream())
+            {
+                var equipment = new Equipment();
+                await uploadModel.EquipmentInvoice.CopyToAsync(ms);
+
+                // Upload the file if less than 2 MB
+                if (ms.Length < 2097152)
+                {
+                    equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
+                    equipment.EquipmentBrand = uploadModel.EquipmentBrand;
+                    equipment.ModelOrReference = uploadModel.ModelOrReference;
+                    equipment.ImeiOrSerial = uploadModel.ImeiOrSerial;
+
+                    equipment.EquipmentInvoice = ms.ToArray();
+
+                    _context.Equipment.Add(equipment);
+
+                    await _context.SaveChangesAsync();
+
+                    return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
+                } else {
+                    return BadRequest("The file is too large.");
+                }
+            }
         }
 
         [HttpPut]
@@ -53,7 +83,7 @@ namespace CelupartsPoC.Controllers
             dbEquipment.Result.EquipmentBrand = request.EquipmentBrand;
             dbEquipment.Result.ModelOrReference = request.ModelOrReference;
             dbEquipment.Result.ImeiOrSerial = request.ImeiOrSerial;
-            dbEquipment.Result.EquipmentInvoice = request.EquipmentInvoice;
+            //dbEquipment.Result.EquipmentInvoice = request.EquipmentInvoice;
 
             await _context.SaveChangesAsync();
 

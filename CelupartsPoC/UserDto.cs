@@ -35,17 +35,4 @@ namespace CelupartsPoC
         public virtual List<RequestWithEquipments>? Requests { get; set; } = new List<RequestWithEquipments>()!;
     }
 
-    public class UserDtoWithoutNothing
-    {
-        [Key]
-        public int? IdUser { get; set; } = 0!;
-        public string IdType { get; set; } = string.Empty;
-        public string IdNumber { get; set; } = string.Empty;
-        public string Names { get; set; } = string.Empty;
-        public string Surnames { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-        public string AlternativePhone { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string AccountStatus { get; set; } = string.Empty;
-    }
 }

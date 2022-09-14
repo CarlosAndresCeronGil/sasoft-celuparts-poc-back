@@ -125,6 +125,7 @@ namespace CelupartsPoC.Controllers
 
                 var requestsWithoutFinalDate = await _context.Request.Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate >= InitialDate))
+                .Include(x => x.UserDto)
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
@@ -155,6 +156,7 @@ namespace CelupartsPoC.Controllers
 
                 var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate <= FinalDate.AddDays(1)))
+                .Include(x => x.UserDto)
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
@@ -182,6 +184,7 @@ namespace CelupartsPoC.Controllers
 
             var requests = await _context.Request.Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1)))
+                .Include(x => x.UserDto)
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
                 .Include(x => x.RequestStatus)
@@ -228,6 +231,19 @@ namespace CelupartsPoC.Controllers
                 .Include(x => x.HomeServices)
                 .Include(x => x.RequestStatus);
             if(request == null)
+            {
+                return BadRequest("Request not found!");
+            }
+            return Ok(request);
+        }
+
+        [HttpGet("UserInfo/{id}")]
+        public async Task<ActionResult<RequestWithEquipments>> GetWithUserInfo(int id)
+        {
+            //var request = _context.Request.FindAsync(id);
+            var request = _context.Request.Where(n => n.IdRequest == id)
+                .Include(x => x.UserDto);
+            if (request == null)
             {
                 return BadRequest("Request not found!");
             }
