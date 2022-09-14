@@ -276,6 +276,7 @@ namespace CelupartsPoC.Controllers
             dbRequest.Result.PickUpAddress = requestR.PickUpAddress;
             dbRequest.Result.DeliveryAddress = requestR.DeliveryAddress;
             dbRequest.Result.StatusQuote = requestR.StatusQuote;
+            dbRequest.Result.AutoDiagnosis = requestR.AutoDiagnosis;
 
             await _context.SaveChangesAsync();
 
