@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CelupartsPoC.Controllers
 {
@@ -30,6 +31,21 @@ namespace CelupartsPoC.Controllers
                 return BadRequest("Equipment not found!");
             }
             return Ok(equipment.Result);
+        }
+
+        [HttpGet("VerifyImei/{id}")]
+        public async Task<ActionResult<string>> VerifyImei(string id)
+        {
+            Random random = new Random();
+            int probabilidad = random.Next(1, 10);
+
+            if(probabilidad == 1)
+            {
+                var respuestaRobado = "Dispositivo registrado como robado";
+                return (JsonConvert.SerializeObject(respuestaRobado));
+            }
+            var respuesta = "Dispositivo válido";
+            return Ok(JsonConvert.SerializeObject(respuesta));
         }
 
         /*[HttpPost]
