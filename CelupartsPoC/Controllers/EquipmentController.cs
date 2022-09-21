@@ -57,6 +57,16 @@ namespace CelupartsPoC.Controllers
             return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
         }*/
 
+        [HttpGet("downloadFile/{id}")]
+        public async Task<ActionResult> Download(int id)
+        {
+            using(var context = _context)
+            {
+                var equipment = await context.Equipment.FindAsync(id);
+                return File(equipment.EquipmentInvoice, "pdf", fileDownloadName: "factura.pdf");
+            }
+        }
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<List<Equipment>>> AddEquipmentWithFile([FromForm] UploadModel uploadModel)
