@@ -123,7 +123,7 @@ namespace CelupartsPoC.Controllers
 
                 var pageCountWithoutFinalDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate)).Count() / pageResults);
 
-                var requestsWithoutFinalDate = await _context.Request.Where(req => req.RequestType == "Reparacion")
+                var requestsWithoutFinalDate = await _context.Request.AsNoTracking().Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate >= InitialDate))
                 .Include(x => x.UserDto)
                 .Include(x => x.Repairs)
