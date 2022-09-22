@@ -76,8 +76,8 @@ namespace CelupartsPoC.Controllers
                 var equipment = new Equipment();
                 await uploadModel.EquipmentInvoice.CopyToAsync(ms);
 
-                // Upload the file if less than 2 MB
-                if (ms.Length < 2097152)
+                // Upload the file if less than 1 MB
+                if (ms.Length < 1090000)
                 {
                     equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
                     equipment.EquipmentBrand = uploadModel.EquipmentBrand;
