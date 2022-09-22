@@ -12,7 +12,8 @@ namespace CelupartsPoC
         public string EquipmentBrand { get; set; } = string.Empty;
         public string ModelOrReference { get; set; } = string.Empty;
         public string ImeiOrSerial { get; set; } = string.Empty;
-        public byte[] EquipmentInvoice { get; set; }
+        public string Path { get; set; } = string.Empty;
+        public byte[]? EquipmentInvoice { get; set; }
         //public virtual List<RequestWithEquipments> Requests { get; set; } = new List<RequestWithEquipments>();
     }
 }

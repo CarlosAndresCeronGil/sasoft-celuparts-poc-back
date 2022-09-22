@@ -9,10 +9,13 @@ namespace CelupartsPoC.Controllers
     public class EquipmentController : ControllerBase
     {
         private readonly DataContext _context;
+        
+        private readonly IWebHostEnvironment _environment;
 
-        public EquipmentController(DataContext context)
+        public EquipmentController(DataContext context, IWebHostEnvironment env)
         {
             this._context = context;
+            _environment = env;
         }
 
         [HttpGet]
@@ -57,7 +60,7 @@ namespace CelupartsPoC.Controllers
             return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
         }*/
 
-        [HttpGet("downloadFile/{id}")]
+        /*[HttpGet("downloadFile/{id}")]
         public async Task<ActionResult> Download(int id)
         {
             using(var context = _context)
@@ -65,9 +68,9 @@ namespace CelupartsPoC.Controllers
                 var equipment = await context.Equipment.FindAsync(id);
                 return File(equipment.EquipmentInvoice, "application/pdf", fileDownloadName: "factura.pdf");
             }
-        }
+        }*/
 
-        [HttpPost]
+        /*[HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<List<Equipment>>> AddEquipmentWithFile([FromForm] UploadModel uploadModel)
         {
@@ -95,6 +98,55 @@ namespace CelupartsPoC.Controllers
                     return BadRequest("The file is too large.");
                 }
             }
+        }*/
+
+        [HttpGet("downloadFile/{id}")]
+        public async Task<ActionResult> Download(int id)
+        {
+            using (var context = _context)
+            {
+                var equipment = await context.Equipment.FindAsync(id);
+
+                var fullFileName = System.IO.Path.Combine(_environment.ContentRootPath, "uploads",
+                    equipment!.Path);
+
+                using (var fs = new System.IO.FileStream(fullFileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using(var ms = new System.IO.MemoryStream())
+                    {
+                        await fs.CopyToAsync(ms);
+                        return File(ms.ToArray(), "application/pdf", fileDownloadName: "factura.pdf");
+                    }
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Upload([FromForm] UploadModel uploadModel)
+        {
+            var fileName = System.IO.Path.Combine(_environment.ContentRootPath,
+                    "uploads", uploadModel.ImeiOrSerial + "" + uploadModel.EquipmentInvoice.FileName);
+
+            await uploadModel.EquipmentInvoice.CopyToAsync(
+                new System.IO.FileStream(fileName, System.IO.FileMode.Create));
+
+            using (var context = _context)
+            {
+                var equipment = new Equipment();
+
+                equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
+                equipment.EquipmentBrand = uploadModel.EquipmentBrand;
+                equipment.ModelOrReference = uploadModel.ModelOrReference;
+                equipment.ImeiOrSerial = uploadModel.ImeiOrSerial;
+
+                equipment.Path = uploadModel.ImeiOrSerial + "" + uploadModel.EquipmentInvoice.FileName;
+
+                _context.Equipment.Add(equipment);
+
+                await _context.SaveChangesAsync();
+                return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
+            }
+
         }
 
         [HttpPut]
