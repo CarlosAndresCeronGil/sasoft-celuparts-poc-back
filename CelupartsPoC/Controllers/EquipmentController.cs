@@ -18,7 +18,7 @@ namespace CelupartsPoC.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Equipment>>> Get()
         {
-            var equipments = _context.Equipment.ToList();
+            var equipments = _context.Equipment.OrderByDescending(x => x.IdEquipment).ToList();
             return Ok(equipments);
         }
 
@@ -63,7 +63,7 @@ namespace CelupartsPoC.Controllers
             using(var context = _context)
             {
                 var equipment = await context.Equipment.FindAsync(id);
-                return File(equipment.EquipmentInvoice, "pdf", fileDownloadName: "factura.pdf");
+                return File(equipment.EquipmentInvoice, "application/pdf", fileDownloadName: "factura.pdf");
             }
         }
 
