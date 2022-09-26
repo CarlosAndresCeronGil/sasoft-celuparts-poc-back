@@ -24,21 +24,42 @@ namespace CelupartsPoC.Controllers
         [HttpGet("Admin")]
         public async Task<ActionResult<List<RequestNotification>>> GetAdminNotifications()
         {
-            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_admin").ToList();
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_admin").OrderByDescending(x => x.IdRequestNotification).ToList();
+            return Ok(requestNotifications);
+        }
+
+        [HttpGet("Admin/FirstThree")]
+        public async Task<ActionResult<List<RequestNotification>>> GetThreeAdminNotifications()
+        {
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_admin").OrderByDescending(x => x.IdRequestNotification).Take(3).ToList();
             return Ok(requestNotifications);
         }
 
         [HttpGet("Technician")]
         public async Task<ActionResult<List<RequestNotification>>> GetTechnicianNotifications()
         {
-            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_technician").ToList();
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_technician").OrderByDescending(x => x.IdRequestNotification).ToList();
+            return Ok(requestNotifications);
+        }
+
+        [HttpGet("Technician/FirstThree")]
+        public async Task<ActionResult<List<RequestNotification>>> GetThreeTechnicianNotifications()
+        {
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_technician").OrderByDescending(x => x.IdRequestNotification).Take(3).ToList();
             return Ok(requestNotifications);
         }
 
         [HttpGet("Courier")]
         public async Task<ActionResult<List<RequestNotification>>> GetCourierNotifications()
         {
-            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_courier").ToList();
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_courier").OrderByDescending(x => x.IdRequestNotification).ToList();
+            return Ok(requestNotifications);
+        }
+
+        [HttpGet("Courier/FirstThree")]
+        public async Task<ActionResult<List<RequestNotification>>> GetThreeCourierNotifications()
+        {
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_courier").OrderByDescending(x => x.IdRequestNotification).Take(3).ToList();
             return Ok(requestNotifications);
         }
 
