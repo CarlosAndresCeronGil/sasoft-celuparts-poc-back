@@ -106,7 +106,8 @@ namespace CelupartsPoC.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.RequestNotification.ToListAsync());
+            //return Ok(await _context.RequestNotification.ToListAsync());
+            return Ok(await _context.RequestNotification.FindAsync(requestNotification.IdRequestNotification));
         }
 
         [HttpDelete("{id}")]
