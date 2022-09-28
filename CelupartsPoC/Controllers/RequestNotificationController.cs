@@ -101,7 +101,7 @@ namespace CelupartsPoC.Controllers
             }
             dbRequestNotification.Result.IdRequest = requestNotification.IdRequest;
             dbRequestNotification.Result.Message = requestNotification.Message;
-            dbRequestNotification.Result.HideNotification = requestNotification.HideNotification;
+            dbRequestNotification.Result.WasReviewed = requestNotification.WasReviewed;
             dbRequestNotification.Result.NotificationType = requestNotification.NotificationType;
 
             await _context.SaveChangesAsync();

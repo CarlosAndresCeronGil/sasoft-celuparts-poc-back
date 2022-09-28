@@ -15,7 +15,7 @@ namespace CelupartsPoC
         public virtual RequestWithEquipments? Request { get; set; }
 
         public string Message { get; set; } = string.Empty;
-        public bool HideNotification { get; set; } = false;
+        public bool WasReviewed { get; set; } = false;
         public string NotificationType { get; set; } = string.Empty;
     }
 }
