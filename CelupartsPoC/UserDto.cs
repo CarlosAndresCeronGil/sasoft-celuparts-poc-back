@@ -3,6 +3,7 @@
 namespace CelupartsPoC
 {
     [Index(nameof(Email), IsUnique = true)]
+    [Index(nameof(IdNumber), IsUnique = true)]
     public class UserDto
     {
         [Key]

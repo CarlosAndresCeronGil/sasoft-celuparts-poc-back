@@ -1,4 +1,5 @@
 ﻿using CelupartsPoC.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -25,43 +26,50 @@ namespace CelupartsPoC.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> RegisterUser(UserDto request)
         {
-            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            try
+            {
+                CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
             
-            //Creating two users, one for login other for compilation of data
-            User user = new User();
-            UserDto NewUserDto = new UserDto();
+                //Creating two users, one for login other for compilation of data
+                User user = new User();
+                UserDto NewUserDto = new UserDto();
 
-            NewUserDto.IdType = request.IdType;
-            NewUserDto.IdNumber = request.IdNumber;
-            NewUserDto.Names = request.Names;
-            NewUserDto.Surnames = request.Surnames;
-            NewUserDto.Phone = request.Phone;
-            NewUserDto.AlternativePhone = request.AlternativePhone;
-            NewUserDto.Email = request.Email;
-            NewUserDto.Password = CommonMethods.ConvertToEncrypt(request.Password);
-            NewUserDto.AccountStatus = request.AccountStatus;
-            NewUserDto.LoginAttempts = 0;
+                NewUserDto.IdType = request.IdType;
+                NewUserDto.IdNumber = request.IdNumber;
+                NewUserDto.Names = request.Names;
+                NewUserDto.Surnames = request.Surnames;
+                NewUserDto.Phone = request.Phone;
+                NewUserDto.AlternativePhone = request.AlternativePhone;
+                NewUserDto.Email = request.Email;
+                NewUserDto.Password = CommonMethods.ConvertToEncrypt(request.Password);
+                NewUserDto.AccountStatus = request.AccountStatus;
+                NewUserDto.LoginAttempts = 0;
 
 
-            _context.UsersDto.Add(NewUserDto);
-            //_context.UsersDto.Add(request);
+                _context.UsersDto.Add(NewUserDto);
+                //_context.UsersDto.Add(request);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            var userDto = _context.UsersDto.FindAsync(NewUserDto.IdUser);
+                var userDto = _context.UsersDto.FindAsync(NewUserDto.IdUser);
 
-            user.Email = request.Email;
-            user.IdUserDto = userDto.Result.IdUser;
-            user.Role = "user";
-            user.FullName = request.Names + " " + request.Surnames;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+                user.Email = request.Email;
+                user.IdUserDto = userDto.Result.IdUser;
+                user.Role = "user";
+                user.FullName = request.Names + " " + request.Surnames;
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
 
-            _context.User.Add(user);
+                _context.User.Add(user);
             
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            return Ok(user);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         [HttpPost("login")]
@@ -99,6 +107,22 @@ namespace CelupartsPoC.Controllers
             string token = CreateToken(dbUser);
             return Ok(token);
         }
+
+        /*[HttpPost("register/Google")]
+        public async Task<ActionResult<string>> LoginWithGoogle([FromForm] UserDto googleData)
+        {
+            /* RECIBE LOS DATOS DE LA API DE GOOGLE
+            return Ok();
+        }*/
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string returnurl = null)
+        {
+            return Challenge(provider, returnurl);
+        }
+
 
         private string CreateToken(User user)
         {
