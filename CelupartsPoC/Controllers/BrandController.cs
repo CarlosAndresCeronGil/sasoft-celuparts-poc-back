@@ -14,10 +14,20 @@ namespace CelupartsPoC.Controllers
             _context = context;
         }
 
-        /*[HttpGet]
+        [HttpGet]
         public async Task<ActionResult<List<Brand>>> Get()
         {
+            return Ok(await _context.Brand.ToListAsync());
+        }
 
+        /*[HttpGet("{id}")]
+        public async Task<ActionResult<Brand>> Get(int id)
+        {
+            var brand = _context.Brand.FindAsync(id);
+            if (brand.Result == null)
+            {
+                return BadRequest("Brand ");
+            }
         }*/
     }
 }

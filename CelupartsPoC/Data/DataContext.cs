@@ -23,5 +23,6 @@ namespace CelupartsPoC.Data
         public DbSet<RetomaPayment> RetomaPayment { get; set; }
         public DbSet<RequestNotification> RequestNotification { get; set; }
         public DbSet<CelupartsInfo> CelupartsInfo { get; set; }
+        public DbSet<Brand> Brand { get; set; }
     }
 }

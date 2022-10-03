@@ -126,28 +126,48 @@ namespace CelupartsPoC.Controllers
         {
             try
             {
-                var fileName = System.IO.Path.Combine(_environment.ContentRootPath,
-                        "uploads", uploadModel.ImeiOrSerial + "" + uploadModel.EquipmentInvoice.FileName);
-
-                await uploadModel.EquipmentInvoice.CopyToAsync(
-                    new System.IO.FileStream(fileName, System.IO.FileMode.Create));
-
-                using (var context = _context)
+                if(uploadModel.EquipmentInvoice != null)
                 {
-                    var equipment = new Equipment();
+                    var fileName = System.IO.Path.Combine(_environment.ContentRootPath,
+                            "uploads", uploadModel.ImeiOrSerial + "" + uploadModel.EquipmentInvoice.FileName);
 
-                    equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
-                    equipment.EquipmentBrand = uploadModel.EquipmentBrand;
-                    equipment.ModelOrReference = uploadModel.ModelOrReference;
-                    equipment.ImeiOrSerial = uploadModel.ImeiOrSerial;
+                    await uploadModel.EquipmentInvoice.CopyToAsync(
+                        new System.IO.FileStream(fileName, System.IO.FileMode.Create));
 
-                    equipment.Path = uploadModel.ImeiOrSerial + "" + uploadModel.EquipmentInvoice.FileName;
+                    using (var context = _context)
+                    {
+                        var equipment = new Equipment();
 
-                    _context.Equipment.Add(equipment);
+                        equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
+                        equipment.EquipmentBrand = uploadModel.EquipmentBrand;
+                        equipment.ModelOrReference = uploadModel.ModelOrReference;
+                        equipment.ImeiOrSerial = uploadModel.ImeiOrSerial;
 
-                    await _context.SaveChangesAsync();
-                    return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
+                        equipment.Path = uploadModel.ImeiOrSerial + "" + uploadModel.EquipmentInvoice.FileName;
+
+                        _context.Equipment.Add(equipment);
+
+                        await _context.SaveChangesAsync();
+                        return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
+                    }
+                } else
+                {
+                    using (var context = _context)
+                    {
+                        var equipment = new Equipment();
+
+                        equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
+                        equipment.EquipmentBrand = uploadModel.EquipmentBrand;
+                        equipment.ModelOrReference = uploadModel.ModelOrReference;
+                        equipment.ImeiOrSerial = uploadModel.ImeiOrSerial;
+
+                        _context.Equipment.Add(equipment);
+
+                        await _context.SaveChangesAsync();
+                        return Ok(await _context.Equipment.FindAsync(equipment.IdEquipment));
+                    }
                 }
+
             }
             catch (Exception ex)
             {
