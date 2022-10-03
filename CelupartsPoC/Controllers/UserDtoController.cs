@@ -50,6 +50,12 @@ namespace CelupartsPoC.Controllers
             return Ok(userDtoWithRequests);
         }
 
+        [HttpGet("SimpleInfo")]
+        public async Task<ActionResult<List<UserDto>>> GetSimpleInfo()
+        {
+            return Ok(await _context.UsersDto.ToListAsync());
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> Get(int id)
         {

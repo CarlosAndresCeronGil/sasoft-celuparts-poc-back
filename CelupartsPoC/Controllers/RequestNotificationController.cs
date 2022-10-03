@@ -63,11 +63,12 @@ namespace CelupartsPoC.Controllers
             return Ok(requestNotifications);
         }
 
-        [HttpGet("Request/{idRequest}")]
-        public async Task<ActionResult<List<RequestNotification>>> GetCustomerNotifications(int idRequest)
+        [HttpGet("Request/{idUserDto}")]
+        public async Task<ActionResult<List<RequestNotification>>> GetCustomerNotifications(int idUserDto)
         {
             //var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_courier").ToList();
-            var requestNotifications = _context.RequestNotification.FromSqlRaw($"select RN.IdRequestNotification, RN.IdRequest, RN.Message, RN.WasReviewed, RN.NotificationType from RequestNotification as RN join Request as R on R.IdRequest=RN.IdRequest where R.IdRequest={idRequest}");
+            //var requestNotifications = _context.RequestNotification.FromSqlRaw($"select RN.IdRequestNotification, RN.IdRequest, RN.Message, RN.WasReviewed, RN.NotificationType from RequestNotification as RN join Request as R on R.IdRequest=RN.IdRequest where R.IdRequest={idRequest}");
+            var requestNotifications = _context.RequestNotification.FromSqlRaw($"select RN.IdRequestNotification, RN.IdRequest, RN.Message, RN.WasReviewed, RN.NotificationType from RequestNotification as RN join Request as R on R.IdRequest = RN.IdRequest join UsersDto as UD on UD.IdUser = R.IdUser where UD.IdUser ={idUserDto} and RN.NotificationType = 'to_customer'");
             return Ok(requestNotifications);
         }
 
