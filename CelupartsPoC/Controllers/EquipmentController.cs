@@ -21,12 +21,15 @@ namespace CelupartsPoC.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Equipment>>> Get()
         {
-            var equipments = _context.Equipment.OrderByDescending(x => x.IdEquipment).ToList();
+            var equipments = _context.Equipment
+                .OrderByDescending(x => x.IdEquipment)
+                .Include(x => x.TypeOfEquipment)
+                .ToList();
             return Ok(equipments);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Equipment>> Get(int id)
+        public async Task<ActionResult<Equipment>> GetById(int id)
         {
             var equipment = _context.Equipment.FindAsync(id);
             if (equipment.Result == null)
@@ -138,10 +141,11 @@ namespace CelupartsPoC.Controllers
                     {
                         var equipment = new Equipment();
 
-                        equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
+                        //equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
                         equipment.EquipmentBrand = uploadModel.EquipmentBrand;
                         equipment.ModelOrReference = uploadModel.ModelOrReference;
                         equipment.ImeiOrSerial = uploadModel.ImeiOrSerial;
+                        equipment.IdTypeOfEquipment = uploadModel.IdTypeOfEquipment;
 
                         equipment.Path = uploadModel.ImeiOrSerial + "" + uploadModel.EquipmentInvoice.FileName;
 
@@ -156,10 +160,11 @@ namespace CelupartsPoC.Controllers
                     {
                         var equipment = new Equipment();
 
-                        equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
+                        //equipment.TypeOfEquipment = uploadModel.TypeOfEquipment;
                         equipment.EquipmentBrand = uploadModel.EquipmentBrand;
                         equipment.ModelOrReference = uploadModel.ModelOrReference;
                         equipment.ImeiOrSerial = uploadModel.ImeiOrSerial;
+                        equipment.IdTypeOfEquipment = uploadModel.IdTypeOfEquipment;
 
                         _context.Equipment.Add(equipment);
 
@@ -183,7 +188,7 @@ namespace CelupartsPoC.Controllers
             {
                 return BadRequest("Equipment not found!");
             }
-            dbEquipment.Result.TypeOfEquipment = request.TypeOfEquipment;
+            //dbEquipment.Result.TypeOfEquipment = request.TypeOfEquipment;
             dbEquipment.Result.EquipmentBrand = request.EquipmentBrand;
             dbEquipment.Result.ModelOrReference = request.ModelOrReference;
             dbEquipment.Result.ImeiOrSerial = request.ImeiOrSerial;

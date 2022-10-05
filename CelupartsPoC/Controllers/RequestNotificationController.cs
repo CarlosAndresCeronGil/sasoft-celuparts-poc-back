@@ -72,6 +72,14 @@ namespace CelupartsPoC.Controllers
             return Ok(requestNotifications);
         }
 
+        [HttpGet("Request/IdRequest/{idRequest}")]
+        public async Task<ActionResult<List<RequestNotification>>> GetNotificationsByIdRequest(int idRequest)
+        {
+            //var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_courier").ToList();
+            var requestNotifications = _context.RequestNotification.FromSqlRaw($"select RN.IdRequestNotification, RN.IdRequest, RN.Message, RN.WasReviewed, RN.NotificationType from RequestNotification as RN join Request as R on R.IdRequest=RN.IdRequest where R.IdRequest={idRequest}");
+            return Ok(requestNotifications);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestNotification>> Get(int id)
         {

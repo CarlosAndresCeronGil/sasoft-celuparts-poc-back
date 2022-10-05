@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221003220433_FiftiethMigrationCelupartsPoC")]
+    partial class FiftiethMigrationCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,14 +112,10 @@ namespace CelupartsPoC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEquipment"), 1L, 1);
 
-                    b.Property<string>("EquipmentBrand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte[]>("EquipmentInvoice")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("IdTypeOfEquipment")
+                    b.Property<int>("IdTypeOfEquipment")
                         .HasColumnType("int");
 
                     b.Property<string>("ImeiOrSerial")
@@ -555,7 +553,9 @@ namespace CelupartsPoC.Migrations
                 {
                     b.HasOne("CelupartsPoC.TypeOfEquipment", "TypeOfEquipment")
                         .WithMany()
-                        .HasForeignKey("IdTypeOfEquipment");
+                        .HasForeignKey("IdTypeOfEquipment")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("TypeOfEquipment");
                 });

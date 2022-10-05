@@ -8,7 +8,13 @@ namespace CelupartsPoC
     {
         [Key]
         public int IdEquipment { get; set; }
-        public string TypeOfEquipment { get; set; } = string.Empty;
+        [JsonIgnore]
+        public int? IdTypeOfEquipment { get; set; }
+        [ForeignKey("IdTypeOfEquipment")]
+        [JsonIgnore]
+        public virtual TypeOfEquipment? TypeOfEquipment { get; set; }
+
+        //public string TypeOfEquipment { get; set; } = string.Empty;
         public string EquipmentBrand { get; set; } = string.Empty;
         public string ModelOrReference { get; set; } = string.Empty;
         public string ImeiOrSerial { get; set; } = string.Empty;
