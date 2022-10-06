@@ -29,7 +29,7 @@ namespace CelupartsPoC.Controllers
             try
             {
                 CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            
+
                 //Creating two users, one for login other for compilation of data
                 User user = new User();
                 UserDto NewUserDto = new UserDto();
@@ -54,14 +54,14 @@ namespace CelupartsPoC.Controllers
                 var userDto = _context.UsersDto.FindAsync(NewUserDto.IdUser);
 
                 user.Email = request.Email;
-                user.IdUserDto = userDto.Result.IdUser;
+                user.IdUser = userDto.Result.IdUser;
                 user.Role = "user";
                 user.FullName = request.Names + " " + request.Surnames;
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
 
                 _context.User.Add(user);
-            
+
                 await _context.SaveChangesAsync();
 
                 return Ok(user);
@@ -78,7 +78,7 @@ namespace CelupartsPoC.Controllers
             //var dbUser = _context.User.FindAsync(request.Email);
             var dbUserDto = _context.UsersDto.Where(x => x.Email == request.Email).FirstOrDefault();
             var dbUser = _context.User.Where(x => x.Email == request.Email).FirstOrDefault();
-            if(dbUser.Email != request.Email)
+            if (dbUser.Email != request.Email)
             {
                 return BadRequest("User not found!");
             }
@@ -87,7 +87,7 @@ namespace CelupartsPoC.Controllers
                 return BadRequest("Account disabled");
             } else if (!VerifyPasswordHash(request.Password, dbUser.PasswordHash, dbUser.PasswordSalt))
             {
-                if(dbUserDto!.LoginAttempts >= 3)
+                if (dbUserDto!.LoginAttempts >= 3)
                 {
                     dbUserDto.AccountStatus = "Inhabilitada";
                     await _context.SaveChangesAsync();
@@ -115,6 +115,16 @@ namespace CelupartsPoC.Controllers
             return Ok();
         }*/
 
+        /*[HttpPost("register/Google")]
+        public async Task<ActionResult> GoogleAthenticate([FromBody] GoogleUser request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(it => it.Errors).Select(it => it.ErrorMessage));
+            }
+            return Ok(GenerateUserToken(await _userService.AuthenticateGoogleUserAsync(request)));
+        }*/
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -131,7 +141,7 @@ namespace CelupartsPoC.Controllers
                 new Claim("email", user.Email),
                 new Claim("name", user.FullName),
                 new Claim("role", user.Role),
-                new Claim("idUser", user.IdUserDto.ToString()),
+                new Claim("idUser", user.IdUser.ToString()),
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -166,5 +176,47 @@ namespace CelupartsPoC.Controllers
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
+
+        /*private UserToken GenerateUserToken(AppUser user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.ASCII.GetBytes(_configuration["Authentication:Jwt:Secret"]);
+
+            var expires = DateTime.UtcNow.AddDays(7);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id) ,
+                    new Claim(JwtRegisteredClaimNames.Sub, _configuration["Authentication:Jwt:Subject"]),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                    new Claim(ClaimTypes.Name, user.Id),
+                    new Claim(ClaimTypes.Surname, user.FirstName),
+                    new Claim(ClaimTypes.GivenName, user.LastName),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email)
+                }),
+
+                Expires = expires,
+
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _configuration["Authentication:Jwt:Issuer"],
+                Audience = _configuration["Authentication:Jwt:Audience"]
+            };
+
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+
+            var token = tokenHandler.WriteToken(securityToken);
+
+            return new UserToken
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                Token = token,
+                Expires = expires
+            };
+        }*/
     }
 }

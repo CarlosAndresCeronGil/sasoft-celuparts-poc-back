@@ -8,7 +8,12 @@ namespace CelupartsPoC
     {
         [Key]
         public int Id { get; set; }
-        public int? IdUserDto { get; set; }
+
+        public int? IdUser { get; set; }
+        [ForeignKey("IdUser")]
+        public virtual UserDto? UserDto { get; set; }
+
+        //public int? IdUserDto { get; set; }
         public string Role { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;

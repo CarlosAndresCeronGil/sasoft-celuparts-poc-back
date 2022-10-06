@@ -53,7 +53,9 @@ namespace CelupartsPoC.Controllers
         [HttpGet("SimpleInfo")]
         public async Task<ActionResult<List<UserDto>>> GetSimpleInfo()
         {
-            return Ok(await _context.UsersDto.ToListAsync());
+            var usersDtoWithRoles = _context.UsersDto.FromSqlRaw($"select UD.IdUser, UD.IdNumber, UD.IdType, UD.LoginAttempts, UD.Names, UD.Surnames, UD.Email, UD.Phone, UD.AlternativePhone, UD.AccountStatus, UD.Password, U.Role from UsersDto as UD join [User] as U on U.IdUser = UD.IdUser where U.Role = 'user'");
+
+            return Ok(usersDtoWithRoles);
         }
 
         [HttpGet("{id}")]
