@@ -307,7 +307,7 @@ namespace CelupartsPoC.Controllers
             MailMessage oMailMessage = new MailMessage(
                 emailOrigen, emailDestino, 
                 "Recuperación de contraseña", 
-                "<h1>Esto es un mensaje de prueba para recuperacion de contraseña</h1><br>"+
+                "<h1>Sigue el siguiente enlace para recuperar tu contraseña</h1><br>"+
                 "<a href='"+url+"'>Click para recuperar</a>");
 
             oMailMessage.IsBodyHtml = true;
