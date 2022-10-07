@@ -1,11 +1,14 @@
 ﻿using CelupartsPoC.Common;
+using Google.Apis.Gmail.v1;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace CelupartsPoC.Controllers
 {
@@ -14,6 +17,7 @@ namespace CelupartsPoC.Controllers
     public class AuthController : ControllerBase
     {
         //public static User user = new User();
+        private string urlDomain = "http://localhost:3000/";
         private readonly IConfiguration _configuration;
         private readonly DataContext _context;
 
@@ -108,6 +112,65 @@ namespace CelupartsPoC.Controllers
             return Ok(token);
         }
 
+        [HttpPost("startRecovery")]
+        public async Task<ActionResult<string>> StartRecovery([FromBody] string email)
+        {
+            try
+            {
+                string token = GetSha256(Guid.NewGuid().ToString());
+
+                var dbUserDto = _context.UsersDto.Where(x => x.Email == email).FirstOrDefault();
+
+                if (dbUserDto != null)
+                {
+                    dbUserDto.TokenRecovery = token;
+                    await _context.SaveChangesAsync();
+
+                    //Enviar email
+                    SendEmail(dbUserDto.Email, token);
+
+                    return Ok("Se editó el Token Recovery");
+                }
+
+                return BadRequest("Email not found");
+            } catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpPost("recoverPassword")]
+        public async Task<ActionResult<string>> Recovery([FromForm] RecoverPassword recoverPassword)
+        {
+            try
+            {
+                CreatePasswordHash(recoverPassword.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+
+                var dbUserDto = _context.UsersDto.Where(x => x.TokenRecovery == recoverPassword.Token).FirstOrDefault();
+
+                if(dbUserDto != null)
+                {
+                    dbUserDto.Password = CommonMethods.ConvertToEncrypt(recoverPassword.NewPassword);
+                    await _context.SaveChangesAsync();
+
+                    var user = _context.User.Where(x => x.Email == dbUserDto.Email).FirstOrDefault();
+
+                    user!.PasswordHash = passwordHash;
+                    user.PasswordSalt = passwordSalt;
+
+                    await _context.SaveChangesAsync();
+
+                    return Ok("Password succesfully updated");
+                }
+
+                return BadRequest("User not found!");
+
+            } catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         /*[HttpPost("register/Google")]
         public async Task<ActionResult<string>> LoginWithGoogle([FromForm] UserDto googleData)
         {
@@ -125,13 +188,13 @@ namespace CelupartsPoC.Controllers
             return Ok(GenerateUserToken(await _userService.AuthenticateGoogleUserAsync(request)));
         }*/
 
-        [HttpPost]
+        /*[HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnurl = null)
         {
             return Challenge(provider, returnurl);
-        }
+        }*/
 
 
         private string CreateToken(User user)
@@ -218,5 +281,49 @@ namespace CelupartsPoC.Controllers
                 Expires = expires
             };
         }*/
+
+        #region HELPERS
+
+        private string GetSha256(string str)
+        {
+            SHA256 sha256 = SHA256Managed.Create();
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] stream = null;
+            StringBuilder sb = new StringBuilder();
+            stream = sha256.ComputeHash(encoding.GetBytes(str));
+            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            return sb.ToString();
+        }
+
+        private void SendEmail(string emailDestino, string token)
+        {
+
+            string emailOrigen = "andrescerontest@gmail.com";
+            //string contraseña = "A12345678!";
+            string contraseña = "trfsieetqmapytxq";
+
+            string url = urlDomain + "changepassword/" + token;
+
+            MailMessage oMailMessage = new MailMessage(
+                emailOrigen, emailDestino, 
+                "Recuperación de contraseña", 
+                "<h1>Esto es un mensaje de prueba para recuperacion de contraseña</h1><br>"+
+                "<a href='"+url+"'>Click para recuperar</a>");
+
+            oMailMessage.IsBodyHtml = true;
+
+
+            SmtpClient oSmtpClient = new SmtpClient("smtp.gmail.com");
+            oSmtpClient.EnableSsl = true;
+            oSmtpClient.UseDefaultCredentials = false;
+            oSmtpClient.Port = 587;
+            oSmtpClient.Credentials = new System.Net.NetworkCredential(emailOrigen, contraseña);
+
+            oSmtpClient.Send(oMailMessage);
+
+            oSmtpClient.Dispose();
+        }
+
+        #endregion
     }
 }

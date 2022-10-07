@@ -19,6 +19,7 @@ namespace CelupartsPoC
         public string Password { get; set; } = string.Empty;
         public string AccountStatus { get; set; } = string.Empty;
         public int LoginAttempts { get; set; } = 0;
+        public string TokenRecovery { get; set; } = string.Empty;
         public virtual List<RequestWithEquipments>? Requests { get; set; } = new List<RequestWithEquipments>()!;
     }
 
