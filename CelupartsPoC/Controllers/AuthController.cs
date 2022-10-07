@@ -297,10 +297,9 @@ namespace CelupartsPoC.Controllers
 
         private void SendEmail(string emailDestino, string token)
         {
-
-            string emailOrigen = "andrescerontest@gmail.com";
+            string emailOrigen = "celupartsrecuperacion@gmail.com";
             //string contraseña = "A12345678!";
-            string contraseña = "trfsieetqmapytxq";
+            string contraseña = "vyilnyzhmwfoomek";
 
             string url = urlDomain + "changepassword/" + token;
 
