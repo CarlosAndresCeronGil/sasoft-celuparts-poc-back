@@ -15,32 +15,47 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpGet("Retomas/{page}/RequestDate")]
-        public async Task<ActionResult<List<RequestWithEquipments>>> GetRetomasByDate(int page, [FromQuery] DateTime InitialDate, [FromQuery] DateTime FinalDate)
+        public async Task<ActionResult<List<RequestWithEquipments>>> GetRetomasByDate(int page, [FromQuery] DateTime InitialDate, [FromQuery] DateTime FinalDate, [FromQuery] string? RequestStatus, [FromQuery] string? UserDtoIdNumber, [FromQuery] string? UserDtoName, [FromQuery] string? UserDtoSurname, [FromQuery] string? EquipmentBrand, [FromQuery] string? EquipmentModel)
         {
             var pageResults = 10f;
 
             if (FinalDate == DateTime.MinValue) {
 
-                var pageCountWithoutFinalDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate >= InitialDate)).Count() / pageResults);
-
-                var lastDate = new DateTime(2020, 1, 1);
+                //var pageCountWithoutFinalDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate >= InitialDate)).Count() / pageResults);
 
                 var requestsWithoutFinalDate = await _context.Request.AsNoTracking().Where(req => req.RequestType == "Retoma")
                 .Where((x => x.RequestDate >= InitialDate))
+                //Filtros para documento de cliente-----------------
+                .Where(x => UserDtoIdNumber != null ? x.UserDto!.IdNumber.Equals(UserDtoIdNumber) : x.UserDto!.IdNumber == x.UserDto.IdNumber)
                 .Include(x => x.UserDto)
+                //Fin de filtros para documento de cliente----------
+                //Filtros para nombre del cliente-------------------
+                .Where(x => UserDtoName != null ? x.UserDto!.Names.Contains(UserDtoName) : x.UserDto!.Names == x.UserDto.Names)
+                .Where(x => UserDtoSurname != null ? x.UserDto!.Surnames.Contains(UserDtoSurname) : x.UserDto!.Surnames == x.UserDto.Surnames)
+                //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
-                .Include(x => x.RequestStatus)
+                //Filtros para estado de retoma------------------
+                .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                //Fin de filtros para estado de retoma-----------
                 .Include(x => x.HomeServices)
+                //Filtros para marca de equipo-----------------------
+                .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
+                //Fin de filtros para marca de equipo----------------
+                //Filtros para modelo de equipo----------------------
+                .Where(x => EquipmentModel != null ? x.Equipment!.ModelOrReference.Contains(EquipmentModel) : x.Equipment!.ModelOrReference == x.Equipment.ModelOrReference)
+                //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
                 .OrderByDescending(x => x.RequestDate)
-                //.Where(x => x.RequestDate > lastDate)
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
+
+                var pageCountWithoutFinalDate = Math.Ceiling(requestsWithoutFinalDate.Count() / pageResults);
 
                 var responseWithoutFinalDate = new RequestResponse
                 {
@@ -55,18 +70,32 @@ namespace CelupartsPoC.Controllers
             else if (InitialDate == DateTime.MinValue)
             {
 
-                var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
-
-                var lastDate = new DateTime(2020, 1, 1);
+                //var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
 
                 var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Retoma")
-                .Where((x => x.RequestDate <= FinalDate.AddDays(1)))
+                .Where((x => x.RequestDate <= FinalDate))
+                //Filtros para documento de cliente-----------------
+                .Where(x => UserDtoIdNumber != null ? x.UserDto!.IdNumber.Equals(UserDtoIdNumber) : x.UserDto!.IdNumber == x.UserDto.IdNumber)
                 .Include(x => x.UserDto)
+                //Fin de filtros para documento de cliente----------
+                //Filtros para nombre del cliente-------------------
+                .Where(x => UserDtoName != null ? x.UserDto!.Names.Contains(UserDtoName) : x.UserDto!.Names == x.UserDto.Names)
+                .Where(x => UserDtoSurname != null ? x.UserDto!.Surnames.Contains(UserDtoSurname) : x.UserDto!.Surnames == x.UserDto.Surnames)
+                //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
-                .Include(x => x.RequestStatus)
+                //Filtros para estado de retoma------------------
+                .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                //Fin de filtros para estado de retoma-----------
                 .Include(x => x.HomeServices)
+                //Filtros para marca de equipo-----------------------
+                .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
+                //Fin de filtros para marca de equipo----------------
+                //Filtros para modelo de equipo----------------------
+                .Where(x => EquipmentModel != null ? x.Equipment!.ModelOrReference.Contains(EquipmentModel) : x.Equipment!.ModelOrReference == x.Equipment.ModelOrReference)
+                //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
@@ -74,6 +103,8 @@ namespace CelupartsPoC.Controllers
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
+
+                var pageCountWithoutInitialDate = Math.Ceiling(requestsWithoutInitialDate.Count() / pageResults);
 
                 var responseWithoutInitialDate = new RequestResponse
                 {
@@ -85,16 +116,29 @@ namespace CelupartsPoC.Controllers
                 return Ok(responseWithoutInitialDate);
             }
 
-            var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+            //var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
 
             var requests = await _context.Request.Where(req => req.RequestType == "Retoma")
-                .Where((x => x.RequestDate >= InitialDate && x.RequestDate  <= FinalDate.AddDays(1)))
+                .Where((x => x.RequestDate >= InitialDate && x.RequestDate  <= FinalDate))
+                //Filtros para documento de cliente-----------------
+                .Where(x => UserDtoIdNumber != null ? x.UserDto!.IdNumber.Equals(UserDtoIdNumber) : x.UserDto!.IdNumber == x.UserDto.IdNumber)
                 .Include(x => x.UserDto)
+                //Fin de filtros para documento de cliente----------
+                //Filtros para nombre del cliente-------------------
+                .Where(x => UserDtoName != null ? x.UserDto!.Names.Contains(UserDtoName) : x.UserDto!.Names == x.UserDto.Names)
+                .Where(x => UserDtoSurname != null ? x.UserDto!.Surnames.Contains(UserDtoSurname) : x.UserDto!.Surnames == x.UserDto.Surnames)
+                //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
-                .Include(x => x.RequestStatus)
+                //Filtros para estado de retoma------------------
+                .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                //Fin de filtros para estado de retoma-----------
                 .Include(x => x.HomeServices)
+                //Filtros para marca de equipo-----------------------
+                .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
+                //Fin de filtros para marca de equipo----------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
@@ -102,6 +146,8 @@ namespace CelupartsPoC.Controllers
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
+
+            var pageCount = Math.Ceiling(requests.Count() / pageResults);
 
             var response = new RequestResponse
             {
@@ -114,23 +160,39 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpGet("Repairs/{page}/RequestDate")]
-        public async Task<ActionResult<List<RequestWithEquipments>>> GetRepairsByDate(int page, [FromQuery] DateTime InitialDate, [FromQuery] DateTime FinalDate)
+        public async Task<ActionResult<List<RequestWithEquipments>>> GetRepairsByDate(int page, [FromQuery] DateTime InitialDate, [FromQuery] DateTime FinalDate, [FromQuery] string? RequestStatus, [FromQuery] string? UserDtoIdNumber, [FromQuery] string? UserDtoName, [FromQuery] string? UserDtoSurname, [FromQuery] string? EquipmentBrand, [FromQuery] string? EquipmentModel)
         {
             var pageResults = 10f;
 
             if (FinalDate == DateTime.MinValue)
             {
 
-                var pageCountWithoutFinalDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate)).Count() / pageResults);
+                //var pageCountWithoutFinalDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate)).Count() / pageResults);
 
                 var requestsWithoutFinalDate = await _context.Request.AsNoTracking().Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate >= InitialDate))
+                //Filtros para documento de cliente-----------------
+                .Where(x => UserDtoIdNumber != null ? x.UserDto!.IdNumber.Equals(UserDtoIdNumber) : x.UserDto!.IdNumber == x.UserDto.IdNumber)
                 .Include(x => x.UserDto)
+                //Fin de filtros para documento de cliente----------
+                //Filtros para nombre del cliente-------------------
+                .Where(x => UserDtoName != null ? x.UserDto!.Names.Contains(UserDtoName) : x.UserDto!.Names == x.UserDto.Names)
+                .Where(x => UserDtoSurname != null ? x.UserDto!.Surnames.Contains(UserDtoSurname) : x.UserDto!.Surnames == x.UserDto.Surnames)
+                //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
-                .Include(x => x.RequestStatus)
+                //Filtros para estado de reparación------------------
+                .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                //Fin de filtros para estado de reparación-----------
                 .Include(x => x.HomeServices)
+                //Filtros para marca de equipo-----------------------
+                .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
+                //Fin de filtros para marca de equipo----------------
+                //Filtros para modelo de equipo----------------------
+                .Where(x => EquipmentModel !=null ? x.Equipment!.ModelOrReference.Contains(EquipmentModel) : x.Equipment!.ModelOrReference == x.Equipment.ModelOrReference)
+                //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
@@ -138,6 +200,8 @@ namespace CelupartsPoC.Controllers
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
+
+                var pageCountWithoutFinalDate = Math.Ceiling(requestsWithoutFinalDate.Count() / pageResults);
 
                 var responseWithoutFinalDate = new RequestResponse
                 {
@@ -152,16 +216,32 @@ namespace CelupartsPoC.Controllers
             else if (InitialDate == DateTime.MinValue)
             {
 
-                var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+                //var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
 
                 var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Reparacion")
-                .Where((x => x.RequestDate <= FinalDate.AddDays(1)))
+                .Where((x => x.RequestDate <= FinalDate))
+                //Filtros para documento de cliente-----------------
+                .Where(x => UserDtoIdNumber != null ? x.UserDto!.IdNumber.Equals(UserDtoIdNumber) : x.UserDto!.IdNumber == x.UserDto.IdNumber)
                 .Include(x => x.UserDto)
+                //Fin de filtros para documento de cliente----------
+                //Filtros para nombre del cliente-------------------
+                .Where(x => UserDtoName != null ? x.UserDto!.Names.Contains(UserDtoName) : x.UserDto!.Names == x.UserDto.Names)
+                .Where(x => UserDtoSurname != null ? x.UserDto!.Surnames.Contains(UserDtoSurname) : x.UserDto!.Surnames == x.UserDto.Surnames)
+                //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
-                .Include(x => x.RequestStatus)
+                //Filtros para estado de reparación------------------
+                .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                //Fin de filtros para estado de reparación-----------
                 .Include(x => x.HomeServices)
+                //Filtros para marca de equipo-----------------------
+                .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
+                //Fin de filtros para marca de equipo----------------
+                //Filtros para modelo de equipo----------------------
+                .Where(x => EquipmentModel != null ? x.Equipment!.ModelOrReference.Contains(EquipmentModel) : x.Equipment!.ModelOrReference == x.Equipment.ModelOrReference)
+                //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
@@ -169,27 +249,42 @@ namespace CelupartsPoC.Controllers
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
+
+                var pageCountWithoutFinalDate = Math.Ceiling(requestsWithoutInitialDate.Count() / pageResults);
 
                 var responseWithoutInitialDate = new RequestResponse
                 {
                     Requests = requestsWithoutInitialDate,
                     CurrentPage = page,
-                    Pages = (int)pageCountWithoutInitialDate
+                    Pages = (int)pageCountWithoutFinalDate
                 };
 
                 return Ok(responseWithoutInitialDate);
             }
 
-            var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+            //var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
 
             var requests = await _context.Request.Where(req => req.RequestType == "Reparacion")
-                .Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1)))
+                .Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate))
+                //Filtros para documento de cliente-----------------
+                .Where(x => UserDtoIdNumber != null ? x.UserDto!.IdNumber.Equals(UserDtoIdNumber) : x.UserDto!.IdNumber == x.UserDto.IdNumber)
                 .Include(x => x.UserDto)
+                //Fin de filtros para documento de cliente----------
+                //Filtros para nombre del cliente-------------------
+                .Where(x => UserDtoName != null ? x.UserDto!.Names.Contains(UserDtoName) : x.UserDto!.Names == x.UserDto.Names)
+                .Where(x => UserDtoSurname != null ? x.UserDto!.Surnames.Contains(UserDtoSurname) : x.UserDto!.Surnames == x.UserDto.Surnames)
+                //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
-                .Include(x => x.RequestStatus)
+                //Filtros para estado de reparación------------------
+                .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
+                //Fin de filtros para estado de reparación-----------
                 .Include(x => x.HomeServices)
+                //Filtros para marca de equipo-----------------------
+                .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
+                //Fin de filtros para marca de equipo----------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
@@ -197,6 +292,8 @@ namespace CelupartsPoC.Controllers
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToListAsync();
+
+            var pageCount = Math.Ceiling(requests.Count() / pageResults);
 
             var response = new RequestResponse
             {
