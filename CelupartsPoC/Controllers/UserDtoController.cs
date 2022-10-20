@@ -58,6 +58,35 @@ namespace CelupartsPoC.Controllers
             return Ok(usersDtoWithRoles);
         }
 
+        [HttpGet("LastRequestInfo/Repair/{id}")]
+        public async Task<ActionResult<List<UserDto>>> GetLastAddressRepair(int id)
+        {
+            try
+            {
+                var usersLastAddress = _context.UsersDto.Where(x => x.IdUser == id)
+                    .Include(x => x.Requests.Where(x => x.RequestType == "Reparacion").OrderByDescending(x => x.IdRequest).Take(1));
+                return Ok(usersLastAddress);
+            } catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("LastRequestInfo/Retoma/{id}")]
+        public async Task<ActionResult<List<UserDto>>> GetLastAddressRetoma(int id)
+        {
+            try
+            {
+                var usersLastAddress = _context.UsersDto.Where(x => x.IdUser == id)
+                    .Include(x => x.Requests.Where(x => x.RequestType == "Retoma").OrderByDescending(x => x.IdRequest).Take(1));
+                return Ok(usersLastAddress);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> Get(int id)
         {
