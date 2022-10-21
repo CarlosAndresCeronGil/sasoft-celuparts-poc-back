@@ -112,6 +112,27 @@ namespace CelupartsPoC.Controllers
             return Ok(token);
         }
 
+        [HttpPost("validateUniqueEmailAndId")]
+        public async Task<ActionResult<string>> ValidateUniqueEmailAndId([FromForm] string email, [FromForm] string id)
+        {
+            try
+            {
+                var userEmail = _context.UsersDto.Where(x => x.Email == email);
+                var userId = _context.UsersDto.Where(x => x.IdNumber == id);
+
+                if(userEmail.Any() || userId.Any())
+                {
+                    return NotFound();
+                }else
+                {
+                    return Ok("");
+                }
+            } catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         [HttpPost("startRecovery")]
         public async Task<ActionResult<string>> StartRecovery([FromBody] string email)
         {
