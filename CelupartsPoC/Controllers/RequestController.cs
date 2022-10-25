@@ -181,6 +181,8 @@ namespace CelupartsPoC.Controllers
                 //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.Technician)
                 //Filtros para estado de reparación------------------
                 .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
                 .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))

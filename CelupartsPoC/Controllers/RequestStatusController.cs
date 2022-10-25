@@ -56,7 +56,7 @@ namespace CelupartsPoC.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.RequestStatus.ToListAsync());
+            return Ok(await _context.RequestStatus.FindAsync(request.IdRequestStatus));
         }
 
         [HttpDelete("{id}")]

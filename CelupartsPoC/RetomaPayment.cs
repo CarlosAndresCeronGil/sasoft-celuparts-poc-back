@@ -16,5 +16,7 @@ namespace CelupartsPoC
 
         public string PaymentMethod { get; set; } = string.Empty;
         public DateTime? PaymentDate { get; set; }
+        public string VoucherNumber { get; set; } = string.Empty;
+        public string BillPaymentPath { get; set; } = string.Empty;
     }
 }

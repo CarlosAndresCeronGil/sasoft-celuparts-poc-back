@@ -49,11 +49,24 @@ namespace CelupartsPoC.Controllers
             {
                 return BadRequest("Repair not found!");
             }
-            dbRepair.Result.IdRequest = request.IdRequest;
-            dbRepair.Result.IdTechnician = request.IdTechnician;
-            dbRepair.Result.RepairDate = request.RepairDate;
-            dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
-            dbRepair.Result.RepairQuote = request.RepairQuote;
+            if(request.RepairStartDate != null && request.RepairDate != null)
+            {
+                dbRepair.Result.IdRequest = request.IdRequest;
+                dbRepair.Result.IdTechnician = request.IdTechnician;
+                dbRepair.Result.RepairStartDate = request.RepairStartDate;
+                dbRepair.Result.RepairDate = request.RepairDate;
+                dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
+                dbRepair.Result.RepairQuote = request.RepairQuote;
+                dbRepair.Result.RepairTime = request.RepairDate - request.RepairStartDate;
+            } else
+            {
+                dbRepair.Result.IdRequest = request.IdRequest;
+                dbRepair.Result.IdTechnician = request.IdTechnician;
+                dbRepair.Result.RepairStartDate = request.RepairStartDate;
+                dbRepair.Result.RepairDate = request.RepairDate;
+                dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
+                dbRepair.Result.RepairQuote = request.RepairQuote;
+            }
 
             await _context.SaveChangesAsync();
 
