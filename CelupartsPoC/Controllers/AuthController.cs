@@ -44,7 +44,7 @@ namespace CelupartsPoC.Controllers
                 NewUserDto.Surnames = request.Surnames;
                 NewUserDto.Phone = request.Phone;
                 NewUserDto.AlternativePhone = request.AlternativePhone;
-                NewUserDto.Email = request.Email;
+                NewUserDto.Email = request.Email.ToLower();
                 NewUserDto.Password = CommonMethods.ConvertToEncrypt(request.Password);
                 NewUserDto.AccountStatus = request.AccountStatus;
                 NewUserDto.LoginAttempts = 0;
@@ -57,7 +57,7 @@ namespace CelupartsPoC.Controllers
 
                 var userDto = _context.UsersDto.FindAsync(NewUserDto.IdUser);
 
-                user.Email = request.Email;
+                user.Email = request.Email.ToLower();
                 user.IdUser = userDto.Result.IdUser;
                 user.Role = "user";
                 user.FullName = request.Names + " " + request.Surnames;
@@ -80,9 +80,9 @@ namespace CelupartsPoC.Controllers
         public async Task<ActionResult<string>> LoginUser(UserDto request)
         {
             //var dbUser = _context.User.FindAsync(request.Email);
-            var dbUserDto = _context.UsersDto.Where(x => x.Email == request.Email).FirstOrDefault();
-            var dbUser = _context.User.Where(x => x.Email == request.Email).FirstOrDefault();
-            if (dbUser.Email != request.Email)
+            var dbUserDto = _context.UsersDto.Where(x => x.Email == request.Email.ToLower()).FirstOrDefault();
+            var dbUser = _context.User.Where(x => x.Email == request.Email.ToLower()).FirstOrDefault();
+            if (dbUser.Email.ToLower() != request.Email.ToLower())
             {
                 return BadRequest("User not found!");
             }

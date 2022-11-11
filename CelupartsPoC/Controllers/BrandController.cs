@@ -34,6 +34,27 @@ namespace CelupartsPoC.Controllers
             return Ok(result);
         }
 
+        [HttpGet("tablets")]
+        public async Task<ActionResult<List<Brand>>> GetTablets()
+        {
+            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 3).ToListAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("smartWatches")]
+        public async Task<ActionResult<List<Brand>>> GetSmartWatches()
+        {
+            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 4).ToListAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("allBrands")]
+        public async Task<ActionResult<List<Brand>>> GetAllBrands()
+        {
+            var result = await _context.Brand.Select(x => x.BrandName).Distinct().ToListAsync();
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Brand>> GetById(int id)
         {

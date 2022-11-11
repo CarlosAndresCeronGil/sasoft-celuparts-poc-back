@@ -24,12 +24,12 @@ namespace CelupartsPoC.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Repair>> Get(int id)
         {
-            var repair = _context.Repair.FindAsync(id);
-            if (repair.Result == null)
+            var repair = _context.Repair.Include(x => x.PartsToRepair).Where(x=> x.IdRepair == id);
+            if (repair == null)
             {
                 return BadRequest("Repair not found!");
             }
-            return Ok(repair.Result);
+            return Ok(repair);
         }
 
         [HttpPost]

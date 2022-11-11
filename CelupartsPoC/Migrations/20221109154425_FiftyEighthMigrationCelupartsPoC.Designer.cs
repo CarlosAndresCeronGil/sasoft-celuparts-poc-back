@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221109154425_FiftyEighthMigrationCelupartsPoC")]
+    partial class FiftyEighthMigrationCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,23 +168,6 @@ namespace CelupartsPoC.Migrations
                     b.HasIndex("IdRequest");
 
                     b.ToTable("HomeService");
-                });
-
-            modelBuilder.Entity("CelupartsPoC.PartsInfo", b =>
-                {
-                    b.Property<int>("IdPartsInfo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPartsInfo"), 1L, 1);
-
-                    b.Property<string>("PartName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdPartsInfo");
-
-                    b.ToTable("PartsInfo");
                 });
 
             modelBuilder.Entity("CelupartsPoC.PartsToRepair", b =>

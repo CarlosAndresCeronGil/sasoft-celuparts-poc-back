@@ -23,7 +23,9 @@ namespace CelupartsPoC.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestStatus>> Get(int id)
         {
-            var requestState = _context.RequestStatus.FindAsync(id);
+            var requestState = _context.RequestStatus
+                .Include(x => x.Request)
+                .FirstOrDefaultAsync(i => i.IdRequestStatus == id );
             if (requestState.Result == null)
             {
                 return BadRequest("Request state not found!");

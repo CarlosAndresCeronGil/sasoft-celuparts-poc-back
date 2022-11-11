@@ -26,5 +26,7 @@ namespace CelupartsPoC.Data
         public DbSet<TypeOfEquipment> TypeOfEquipment { get; set; }
         public DbSet<Brand> Brand { get; set; }
         public DbSet<RequestHistory> RequestHistory { get; set; }
+        public DbSet<PartsToRepair> PartsToRepair { get; set; }
+        public DbSet<PartsInfo> PartsInfo { get; set; }
     }
 }

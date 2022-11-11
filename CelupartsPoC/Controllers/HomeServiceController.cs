@@ -58,6 +58,23 @@ namespace CelupartsPoC.Controllers
             return Ok(await _context.HomeService.ToListAsync());
         }
 
+        [HttpPut("byIdRequest")]
+        public async Task<ActionResult<List<HomeService>>> UpdateHomeServiceByIdRequest(HomeService request)
+        {
+            var dbHomeService =  _context.HomeService.Where(x => x.IdRequest == request.IdRequest).FirstOrDefault();
+            if(dbHomeService == null)
+            {
+                return BadRequest("Home service not found!");
+            }
+            dbHomeService.IdRequest = request.IdRequest;
+            dbHomeService.IdCourier = request.IdCourier;
+            dbHomeService.DeliveryDate = request.DeliveryDate;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.HomeService.FindAsync(request.IdRequest));
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<HomeService>>> Delete(int id)
         {

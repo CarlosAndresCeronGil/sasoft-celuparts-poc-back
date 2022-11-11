@@ -31,6 +31,17 @@ namespace CelupartsPoC.Controllers
             return Ok(technician.Result);
         }
 
+        [HttpGet("ByEmail/{email}")]
+        public async Task<ActionResult<Technician>> GetByEmail(string email)
+        {
+            var technician = _context.Technician.FirstOrDefaultAsync(x => x.Email.Equals(email));
+            if (technician.Result == null)
+            {
+                return BadRequest("Technician not found!");
+            }
+            return Ok(technician.Result);
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Technician>>> AddTechnician(Technician technician)
         {

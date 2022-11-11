@@ -24,5 +24,6 @@ namespace CelupartsPoC
         public string DeviceDiagnostic { get; set; } = string.Empty;
         public string RepairQuote { get; set; } = string.Empty;
         public virtual List<RepairPayment> RepairPayments { get; set; } = new List<RepairPayment>();
+        public virtual List<PartsToRepair> PartsToRepair { get; set; } = new List<PartsToRepair>();
     }
 }
