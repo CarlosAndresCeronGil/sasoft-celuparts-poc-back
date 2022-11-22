@@ -4,6 +4,7 @@ using CelupartsPoC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CelupartsPoC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221121133643_SixtiethMigrationCelupartsPoC")]
+    partial class SixtiethMigrationCelupartsPoC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,9 +233,6 @@ namespace CelupartsPoC.Migrations
                     b.Property<int?>("IdTechnician")
                         .HasColumnType("int");
 
-                    b.Property<bool>("PriceReviewedByAdmin")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("RepairDate")
                         .HasColumnType("datetime2");
 
@@ -277,6 +276,9 @@ namespace CelupartsPoC.Migrations
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PriceReviewedByAdmin")
+                        .HasColumnType("bit");
 
                     b.HasKey("IdRepairPayment");
 
@@ -435,9 +437,6 @@ namespace CelupartsPoC.Migrations
                     b.Property<int?>("IdTechnician")
                         .HasColumnType("int");
 
-                    b.Property<bool>("PriceReviewedByAdmin")
-                        .HasColumnType("bit");
-
                     b.Property<string>("RetomaQuote")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -472,6 +471,9 @@ namespace CelupartsPoC.Migrations
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PriceReviewedByAdmin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("VoucherNumber")
                         .IsRequired()

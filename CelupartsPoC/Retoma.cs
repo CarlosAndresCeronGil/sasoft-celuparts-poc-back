@@ -20,6 +20,7 @@ namespace CelupartsPoC
 
         public string RetomaQuote { get; set; } = string.Empty;
         public string DeviceDiagnostic { get; set; } = string.Empty;
+        public bool PriceReviewedByAdmin { get; set; } = false;
         public virtual List<RetomaPayment> RetomaPayments { get; set; } = new List<RetomaPayment>();
     }
 }

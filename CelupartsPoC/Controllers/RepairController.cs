@@ -58,6 +58,7 @@ namespace CelupartsPoC.Controllers
                 dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
                 dbRepair.Result.RepairQuote = request.RepairQuote;
                 dbRepair.Result.RepairTime = request.RepairDate - request.RepairStartDate;
+                dbRepair.Result.PriceReviewedByAdmin = request.PriceReviewedByAdmin;
             } else
             {
                 dbRepair.Result.IdRequest = request.IdRequest;
@@ -66,11 +67,27 @@ namespace CelupartsPoC.Controllers
                 dbRepair.Result.RepairDate = request.RepairDate;
                 dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
                 dbRepair.Result.RepairQuote = request.RepairQuote;
+                dbRepair.Result.PriceReviewedByAdmin = request.PriceReviewedByAdmin;
             }
 
             await _context.SaveChangesAsync();
 
             return Ok(await _context.Repair.ToListAsync());
+        }
+
+        [HttpPut("repairStartDate/byIdRequest/{id}")]
+        public async Task<ActionResult<List<Repair>>> UpdateRepairStartDateByIdRepair(int id)
+        {
+            var dbRepair = _context.Repair.Where(x => x.IdRequest == id).FirstOrDefault();
+            if(dbRepair == null)
+            {
+                return BadRequest("Repair Not Found");
+            }
+            dbRepair.RepairStartDate = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(dbRepair);
         }
 
         [HttpDelete("{id}")]

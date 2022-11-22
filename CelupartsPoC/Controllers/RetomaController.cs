@@ -52,6 +52,7 @@ namespace CelupartsPoC.Controllers
             dbRetoma.Result.IdTechnician = request.IdTechnician;
             dbRetoma.Result.RetomaQuote = request.RetomaQuote;
             dbRetoma.Result.DeviceDiagnostic = request.DeviceDiagnostic;
+            dbRetoma.Result.PriceReviewedByAdmin = request.PriceReviewedByAdmin;
 
             await _context.SaveChangesAsync();
 

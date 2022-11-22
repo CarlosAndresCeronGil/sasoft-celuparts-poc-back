@@ -119,6 +119,26 @@ namespace CelupartsPoC.Controllers
             return Ok(await _context.RequestNotification.FindAsync(requestNotification.IdRequestNotification));
         }
 
+        [HttpPut("byIdRequest")]
+        public async Task<ActionResult<List<RequestNotification>>> UpdateRequestNotificationByIdRequest(RequestNotification requestNotification)
+        {
+            var dbRequestNotification = _context.RequestNotification
+                .Where(x => x.IdRequestNotification == requestNotification.IdRequestNotification)
+                .Where(x => x.IdRequest == requestNotification.IdRequest)
+                .FirstOrDefault();
+            if (dbRequestNotification == null)
+            {
+                return BadRequest("Request notification not found!");
+            }
+            dbRequestNotification.Message = requestNotification.Message;
+            dbRequestNotification.WasReviewed = requestNotification.WasReviewed;
+            dbRequestNotification.NotificationType = requestNotification.NotificationType;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.RequestNotification.FindAsync(requestNotification.IdRequestNotification));
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<RequestNotification>>> Delete(int id)
         {
