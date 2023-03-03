@@ -56,7 +56,7 @@ namespace CelupartsPoC.Controllers
                 dbRepair.Result.RepairStartDate = request.RepairStartDate;
                 dbRepair.Result.RepairDate = request.RepairDate;
                 dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
-                //dbRepair.Result.RepairDiagnostic = request.RepairDiagnostic;
+                dbRepair.Result.RepairDiagnostic = request.RepairDiagnostic;
                 dbRepair.Result.RepairQuote = request.RepairQuote;
                 dbRepair.Result.RepairTime = request.RepairDate - request.RepairStartDate;
                 dbRepair.Result.PriceReviewedByAdmin = request.PriceReviewedByAdmin;
@@ -67,7 +67,7 @@ namespace CelupartsPoC.Controllers
                 dbRepair.Result.RepairStartDate = request.RepairStartDate;
                 dbRepair.Result.RepairDate = request.RepairDate;
                 dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
-                //dbRepair.Result.RepairDiagnostic = request.RepairDiagnostic;
+                dbRepair.Result.RepairDiagnostic = request.RepairDiagnostic;
                 dbRepair.Result.RepairQuote = request.RepairQuote;
                 dbRepair.Result.PriceReviewedByAdmin = request.PriceReviewedByAdmin;
             }
