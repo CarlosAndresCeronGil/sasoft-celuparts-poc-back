@@ -89,6 +89,20 @@ namespace CelupartsPoC.Controllers
 
             return Ok(dbRepair);
         }
+        [HttpPut("repairTecnhnician/byIdRequest/{id}")]
+        public async Task<ActionResult<List<Repair>>> UpdateRepairTechnicianByIdRepair(int id, int idTechnician)
+        {
+            var dbRepair = _context.Repair.Where(x => x.IdRequest == id).FirstOrDefault();
+            if (dbRepair == null)
+            {
+                return BadRequest("Repair Not Found");
+            }
+            dbRepair.IdTechnician = idTechnician;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(dbRepair);
+        }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Repair>>> Delete(int id)
