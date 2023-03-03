@@ -89,7 +89,8 @@ namespace CelupartsPoC.Controllers
 
             return Ok(dbRepair);
         }
-        [HttpPut("repairTecnhnician/byIdRequest/{id}")]
+        
+        [HttpPut("repairTecnhnician/byIdRequest/{id}/{idTechnician}")]
         public async Task<ActionResult<List<Repair>>> UpdateRepairTechnicianByIdRepair(int id, int idTechnician)
         {
             var dbRepair = _context.Repair.Where(x => x.IdRequest == id).FirstOrDefault();
