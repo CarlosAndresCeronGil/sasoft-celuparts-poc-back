@@ -519,7 +519,7 @@ namespace CelupartsPoC.Controllers
         {
             //request.RequestDate = DateTime.UtcNow.Date; Devuelve 2022-09-05 00:00:00.0000000
             //request.RequestDate = DateTime.Today; Devuelve 2022-09-05 00:00:00.0000000
-            request.RequestDate = DateTime.Today;
+            request.RequestDate = DateTime.Now;
             _context.Request.Add(request);
             await _context.SaveChangesAsync();
 
