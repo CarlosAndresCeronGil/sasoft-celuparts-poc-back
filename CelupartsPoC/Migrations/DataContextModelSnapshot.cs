@@ -238,7 +238,6 @@ namespace CelupartsPoC.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RepairDiagnostic")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RepairQuote")

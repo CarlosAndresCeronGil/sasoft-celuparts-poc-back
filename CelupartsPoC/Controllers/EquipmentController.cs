@@ -117,8 +117,9 @@ namespace CelupartsPoC.Controllers
                 {
                     using(var ms = new System.IO.MemoryStream())
                     {
-                        await fs.CopyToAsync(ms);
-                        return File(ms.ToArray(), "application/pdf", fileDownloadName: "factura.pdf");
+                        await fs.CopyToAsync(ms);                       
+                        var extension = Path.GetExtension(equipment.Path).Substring(1);
+                        return File(ms.ToArray(), extension == "pdf" ? "application/pdf" : "image/" + extension, fileDownloadName: "factura.pdf");
                     }
                 }
             }
