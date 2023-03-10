@@ -24,7 +24,7 @@ namespace CelupartsPoC.Controllers
         [HttpGet("Admin")]
         public async Task<ActionResult<List<RequestNotification>>> GetAdminNotifications()
         {
-            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_admin").OrderByDescending(x => x.IdRequestNotification).ToList();
+            var requestNotifications = _context.RequestNotification.Where(x => x.NotificationType == "to_admin" || x.NotificationType == "to_aux_admin").OrderByDescending(x => x.IdRequestNotification).ToList();
             return Ok(requestNotifications);
         }
 
