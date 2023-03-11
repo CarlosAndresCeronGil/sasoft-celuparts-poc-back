@@ -16,7 +16,7 @@ namespace CelupartsPoC.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Retoma>>> Get()
         {
-            var retomas = _context.Retoma.ToList();
+            var retomas = _context.Retoma.Include(x => x.Technician);
             return Ok(retomas);
         }
 
