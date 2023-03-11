@@ -58,6 +58,20 @@ namespace CelupartsPoC.Controllers
 
             return Ok(await _context.Retoma.ToListAsync());
         }
+        [HttpPut("retomaTecnhnician/byIdRequest/{id}/{idTechnician}")]
+        public async Task<ActionResult<List<Retoma>>> UpdateRetomaTechnician(int id, int idTechnician)
+        {
+            var dbRetoma = _context.Retoma.Where(x => x.IdRequest == id).FirstOrDefault();
+            if (dbRetoma == null)
+            {
+                return BadRequest("Retoma not found!");
+            }
+            dbRetoma.IdTechnician = idTechnician;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Retoma.ToListAsync());
+        }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Retoma>>> Delete(int id)
