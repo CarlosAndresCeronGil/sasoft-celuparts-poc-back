@@ -49,6 +49,8 @@ namespace CelupartsPoC.Controllers
                 //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.Technician)
                 .Include(x => x.RequestNotifications)
                 .OrderByDescending(x => x.RequestDate)
                 .Skip((page - 1) * (int)pageResults)
