@@ -24,6 +24,12 @@ namespace CelupartsPoC
         public string StatusQuote { get; set; } = string.Empty;
         public DateTime RequestDate { get; set; } = new DateTime();
         public string AutoDiagnosis { get; set; } = string.Empty;
+        public string Names { get; set; } = string.Empty;
+        public string Surnames { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string AlternativePhone { get; set; } = string.Empty;
+        public string IdType { get; set; } = string.Empty;
+        public string IdNumber { get; set; } = string.Empty;
         public virtual List<RequestStatus> RequestStatus { get; set; } = new List<RequestStatus>()!;
         public virtual List<Repair> Repairs { get; set; } = new List<Repair>();
         public virtual List<HomeService> HomeServices { get; set; } = new List<HomeService>();
