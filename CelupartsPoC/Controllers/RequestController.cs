@@ -73,7 +73,7 @@ namespace CelupartsPoC.Controllers
             }
             else if (InitialDate == DateTime.MinValue)
             {
-
+                FinalDate = new DateTime(FinalDate.Year, FinalDate.Month, FinalDate.Day, 23, 59, 59);
                 //var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
 
                 var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Retoma")
@@ -102,6 +102,8 @@ namespace CelupartsPoC.Controllers
                 //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.Technician)
                 .Include(x => x.RequestNotifications)
                 .OrderByDescending(x => x.RequestDate)
                 .Skip((page - 1) * (int)pageResults)
@@ -123,7 +125,8 @@ namespace CelupartsPoC.Controllers
             }
 
             //var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Retoma").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
-
+            FinalDate = new DateTime(FinalDate.Year, FinalDate.Month, FinalDate.Day, 23, 59, 59);
+            
             var requests = await _context.Request.Where(req => req.RequestType == "Retoma")
                 .Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate))
                 //Filtros para documento de cliente-----------------
@@ -147,6 +150,8 @@ namespace CelupartsPoC.Controllers
                 //Fin de filtros para marca de equipo----------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
+                .Include(x => x.Retoma)
+                    .ThenInclude(y => y.Technician)
                 .Include(x => x.RequestNotifications)
                 .OrderByDescending(x => x.RequestDate)
                 .Skip((page - 1) * (int)pageResults)
@@ -229,6 +234,7 @@ namespace CelupartsPoC.Controllers
             {
 
                 //var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+                FinalDate = new DateTime(FinalDate.Year, FinalDate.Month, FinalDate.Day, 23, 59, 59);
 
                 var requestsWithoutInitialDate = await _context.Request.Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate <= FinalDate))
@@ -242,6 +248,8 @@ namespace CelupartsPoC.Controllers
                 //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.Repairs)
+                .ThenInclude(y => y.Technician)
                 //Filtros para estado de reparación------------------
                 .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
                 .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
@@ -277,6 +285,7 @@ namespace CelupartsPoC.Controllers
             }
 
             //var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+            FinalDate = new DateTime(FinalDate.Year, FinalDate.Month, FinalDate.Day, 23, 59, 59);
 
             var requests = await _context.Request.Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate))
@@ -290,6 +299,8 @@ namespace CelupartsPoC.Controllers
                 //Fin de filtros para nombre del cliente------------
                 .Include(x => x.Repairs)
                     .ThenInclude(y => y.RepairPayments)
+                .Include(x => x.Repairs)
+                    .ThenInclude(y => y.Technician)
                 //Filtros para estado de reparación------------------
                 .Where(x => x.RequestStatus.Any(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
                 .Include(x => x.RequestStatus.Where(x => RequestStatus != null ? x.Status == RequestStatus : x.Status.Contains("")))
