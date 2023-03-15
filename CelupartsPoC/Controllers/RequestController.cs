@@ -393,6 +393,7 @@ namespace CelupartsPoC.Controllers
             {
 
                 //var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+                FinalDate = new DateTime(FinalDate.Year, FinalDate.Month, FinalDate.Day, 23, 59, 59);
 
                 var requestsWithoutInitialDate = await _context.Request
                 .Where((x => x.RequestDate <= FinalDate))
@@ -441,6 +442,7 @@ namespace CelupartsPoC.Controllers
             }
 
             //var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
+            FinalDate = new DateTime(FinalDate.Year, FinalDate.Month, FinalDate.Day, 23, 59, 59);
 
             var requests = await _context.Request
                 .Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate))
