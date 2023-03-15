@@ -9,7 +9,7 @@ namespace CelupartsPoC
         [Key]
         public int? IdUser { get; set; }
         public string IdType { get; set; } = string.Empty;
-        public string IdNumber { get; set; } = string.Empty;
+        public string? IdNumber { get; set; }
         public string Names { get; set; } = string.Empty;
         public string Surnames { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
