@@ -112,6 +112,18 @@ namespace CelupartsPoC.Controllers
             return Ok(token);
         }
 
+        [HttpPost("LoginGoogle")]
+        public async Task<ActionResult<string>> LoginGoogle(string email)
+        {
+            var dbUser = _context.User.Where(x => x.Email == email.ToLower()).FirstOrDefault();
+            if (dbUser == null)
+            {
+                return BadRequest("User not found!");
+            }
+            string token = CreateToken(dbUser);
+            return Ok(token);
+        }
+
         [HttpPost("validateUniqueEmailAndId")]
         public async Task<ActionResult<string>> ValidateUniqueEmailAndId([FromForm] string email, [FromForm] string id)
         {
