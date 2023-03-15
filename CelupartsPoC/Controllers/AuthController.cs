@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
 using System.Security.Claims;
@@ -113,9 +114,9 @@ namespace CelupartsPoC.Controllers
         }
 
         [HttpPost("LoginGoogle")]
-        public async Task<ActionResult<string>> LoginGoogle(string email)
+        public async Task<ActionResult<string>> LoginGoogle(UserDto user)
         {
-            var dbUser = _context.User.Where(x => x.Email == email.ToLower()).FirstOrDefault();
+            var dbUser = _context.User.Where(x => x.Email == user.Email.ToLower()).FirstOrDefault();
             if (dbUser == null)
             {
                 return BadRequest("User not found!");
