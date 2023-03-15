@@ -32,7 +32,7 @@ namespace CelupartsPoC.Controllers
                 Requests = userDto.Requests.Select(n => n).ToList()
             }).ToList();*/
             var userDtoWithRequests = _context.UsersDto
-                .Include(x => x.Requests)
+                .Include(x => x.Requests.OrderByDescending(x => x.IdRequest))
                     .ThenInclude(y => y.RequestStatus)
                 .Include(x => x.Requests)
                     .ThenInclude(y => y.Repairs)
