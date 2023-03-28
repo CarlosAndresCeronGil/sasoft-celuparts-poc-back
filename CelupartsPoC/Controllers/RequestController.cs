@@ -65,7 +65,7 @@ namespace CelupartsPoC.Controllers
                 {
                     Requests = finalRequestWithoutFinalDate,
                     CurrentPage = page,
-                    Pages = (int)pageCountWithoutFinalDate
+                    Pages = (int)pageCountWithoutFinalDate + page -1
                 };
 
                 return Ok(responseWithoutFinalDate);
@@ -118,7 +118,7 @@ namespace CelupartsPoC.Controllers
                 {
                     Requests = finalRequestWithoutInitialDate,
                     CurrentPage = page,
-                    Pages = (int)pageCountWithoutInitialDate
+                    Pages = (int)pageCountWithoutInitialDate + page -1
                 };
 
                 return Ok(responseWithoutInitialDate);
@@ -166,7 +166,7 @@ namespace CelupartsPoC.Controllers
             {
                 Requests = finalRequest,
                 CurrentPage = page,
-                Pages = (int)pageCount
+                Pages = (int)pageCount + page -1
             };
 
             return Ok(response);
@@ -224,7 +224,7 @@ namespace CelupartsPoC.Controllers
                 {
                     Requests = finalRequestWithoutFinalDate,
                     CurrentPage = page,
-                    Pages = (int)pageCountWithoutFinalDate
+                    Pages = (int)pageCountWithoutFinalDate + page -1
                 };
 
                 return Ok(responseWithoutFinalDate);
@@ -278,7 +278,7 @@ namespace CelupartsPoC.Controllers
                 {
                     Requests = finalRequestWithoutInitialDate,
                     CurrentPage = page,
-                    Pages = (int)pageCountWithoutFinalDate
+                    Pages = (int)pageCountWithoutFinalDate + page - 1
                 };
 
                 return Ok(responseWithoutInitialDate);
@@ -326,7 +326,7 @@ namespace CelupartsPoC.Controllers
             {
                 Requests = finalRequest,
                 CurrentPage = page,
-                Pages = (int)pageCount
+                Pages = (int)pageCount + page - 1
             };
 
             return Ok(response);
@@ -383,7 +383,7 @@ namespace CelupartsPoC.Controllers
                 {
                     Requests = finalRequestWithoutFinalDate,
                     CurrentPage = page,
-                    Pages = (int)pageCountWithoutFinalDate
+                    Pages = (int)pageCountWithoutFinalDate + page -1
                 };
 
                 return Ok(responseWithoutFinalDate);
@@ -435,7 +435,7 @@ namespace CelupartsPoC.Controllers
                 {
                     Requests = finalRequestWithoutInitialDate,
                     CurrentPage = page,
-                    Pages = (int)pageCountWithoutFinalDate
+                    Pages = (int)pageCountWithoutFinalDate + page -1
                 };
 
                 return Ok(responseWithoutInitialDate);
@@ -481,7 +481,7 @@ namespace CelupartsPoC.Controllers
             {
                 Requests = finalRequest,
                 CurrentPage = page,
-                Pages = (int)pageCount
+                Pages = (int)pageCount + page -1
             };
 
             return Ok(response);

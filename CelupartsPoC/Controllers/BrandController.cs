@@ -23,28 +23,28 @@ namespace CelupartsPoC.Controllers
         [HttpGet("computers")]
         public async Task<ActionResult<List<Brand>>> GetComputers()
         {
-            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 1).ToListAsync();
+            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 1).OrderBy(x => x.BrandName).ToListAsync();
             return Ok(result);
         }
 
         [HttpGet("cellphones")]
         public async Task<ActionResult<List<Brand>>> GetCellphones()
         {
-            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 2).ToListAsync();
+            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 2).OrderBy(x => x.BrandName).ToListAsync();
             return Ok(result);
         }
 
         [HttpGet("tablets")]
         public async Task<ActionResult<List<Brand>>> GetTablets()
         {
-            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 3).ToListAsync();
+            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 3).OrderBy(x => x.BrandName).ToListAsync();
             return Ok(result);
         }
 
         [HttpGet("smartWatches")]
         public async Task<ActionResult<List<Brand>>> GetSmartWatches()
         {
-            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 4).ToListAsync();
+            var result = await _context.Brand.Where(x => x.IdTypeOfEquipment == 4).OrderBy(x => x.BrandName).ToListAsync();
             return Ok(result);
         }
 
