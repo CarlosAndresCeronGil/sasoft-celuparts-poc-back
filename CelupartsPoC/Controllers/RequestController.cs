@@ -148,6 +148,8 @@ namespace CelupartsPoC.Controllers
                 .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
                 //Fin de filtros para marca de equipo----------------
+                .Where(x => EquipmentModel != null ? x.Equipment!.ModelOrReference.Contains(EquipmentModel) : x.Equipment!.ModelOrReference == x.Equipment.ModelOrReference)
+                //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.Retoma)
@@ -232,7 +234,7 @@ namespace CelupartsPoC.Controllers
             }
             else if (InitialDate == DateTime.MinValue)
             {
-
+                
                 //var pageCountWithoutInitialDate = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
                 FinalDate = new DateTime(FinalDate.Year, FinalDate.Month, FinalDate.Day, 23, 59, 59);
 
@@ -286,7 +288,7 @@ namespace CelupartsPoC.Controllers
 
             //var pageCount = Math.Ceiling(_context.Request.Where(req => req.RequestType == "Reparacion").Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate.AddDays(1))).Count() / pageResults);
             FinalDate = new DateTime(FinalDate.Year, FinalDate.Month, FinalDate.Day, 23, 59, 59);
-
+            
             var requests = await _context.Request.Where(req => req.RequestType == "Reparacion")
                 .Where((x => x.RequestDate >= InitialDate && x.RequestDate <= FinalDate))
                 //Filtros para documento de cliente-----------------
@@ -310,6 +312,9 @@ namespace CelupartsPoC.Controllers
                 .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
                 //Fin de filtros para marca de equipo----------------
+                //Filtros para modelo de equipo----------------------
+                .Where(x => EquipmentModel != null ? x.Equipment!.ModelOrReference.Contains(EquipmentModel) : x.Equipment!.ModelOrReference == x.Equipment.ModelOrReference)
+                //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)
@@ -465,6 +470,9 @@ namespace CelupartsPoC.Controllers
                 .Where(x => EquipmentBrand != null ? x.Equipment!.EquipmentBrand.Contains(EquipmentBrand) : x.Equipment!.EquipmentBrand == x.Equipment.EquipmentBrand)
                 .Include(x => x.Equipment)
                 //Fin de filtros para marca de equipo----------------
+                //Filtros para modelo de equipo----------------------
+                .Where(x => EquipmentModel != null ? x.Equipment!.ModelOrReference.Contains(EquipmentModel) : x.Equipment!.ModelOrReference == x.Equipment.ModelOrReference)
+                //Fin de filtros para modelo de equipo---------------
                 .Include(x => x.Retoma)
                     .ThenInclude(y => y.RetomaPayments)
                 .Include(x => x.RequestNotifications)

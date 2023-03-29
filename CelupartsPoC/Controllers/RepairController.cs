@@ -54,11 +54,11 @@ namespace CelupartsPoC.Controllers
                 dbRepair.Result.IdRequest = request.IdRequest;
                 dbRepair.Result.IdTechnician = request.IdTechnician;
                 dbRepair.Result.RepairStartDate = request.RepairStartDate;
-                dbRepair.Result.RepairDate = request.RepairDate;
+                dbRepair.Result.RepairDate = DateTime.Now;
                 dbRepair.Result.DeviceDiagnostic = request.DeviceDiagnostic;
                 dbRepair.Result.RepairDiagnostic = request.RepairDiagnostic;
                 dbRepair.Result.RepairQuote = request.RepairQuote;
-                dbRepair.Result.RepairTime = request.RepairDate - request.RepairStartDate;
+                dbRepair.Result.RepairTime = request.RepairDate.Value - request.RepairStartDate.Value;
                 dbRepair.Result.PriceReviewedByAdmin = request.PriceReviewedByAdmin;
             } else
             {
